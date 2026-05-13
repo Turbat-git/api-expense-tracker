@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
             'family_name' => 'User',
             'email' => 'test@example.com',
         ]);
+
+        $this->call([
+            CategorySeeder::class,
+        ]);
     }
 }
