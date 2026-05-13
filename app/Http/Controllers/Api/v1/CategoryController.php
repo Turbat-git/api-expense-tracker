@@ -6,10 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
+/**
+ * @group Category Controller
+ *
+ * APIs for CRUD operation with Category
+ */
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List categories
+     *
+     * Admins receive all categories paginated. Clients only receive their own.
+     *
+     * @authenticated
+     *
+     * @response scenario="Admin: all categories" {
+     *   "current_page": 1,
+     *   "data": [{"id": 1, "name": "Electronics", "user_id": 5}],
+     *   "per_page": 10,
+     *   "total": 50
+     * }
+     *
+     * @response scenario="Client: own categories" {
+     *   "current_page": 1,
+     *   "data": [{"id": 1, "name": "Electronics", "user_id": 3}],
+     *   "per_page": 10,
+     *   "total": 5
+     * }
+     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
      */
     public function index(Request $request)
     {
@@ -28,7 +52,18 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a category
+     *
+     * Admins can assign a category to any user. Clients create categories for themselves only.
+     *
+     * @authenticated
+     *
+     * @bodyParam name string required The name of the category. Example: Electronics
+     * @bodyParam user_id int The ID of the user to assign the category to (admin only). Example: 5
+     *
+     * @response 201 scenario="Success" {"id": 1, "name": "Electronics", "user_id": 5}
+     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
+     * @response 422 scenario="Validation error" {"message": "The name field is required."}
      */
     public function store(Request $request)
     {
@@ -65,7 +100,21 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get a category
+     *
+     * Admins can view any category. Clients can only view their own.
+     *
+     * @authenticated
+     *
+     * @urlParam category int required The ID of the category. Example: 1
+     *
+     * @response scenario="Success" {"id": 1, "name": "Electronics", "user_id": 5}
+     * @responseField id int The category ID.
+     * @responseField name string The category name.
+     * @responseField user_id int The ID of the owning user.
+     *
+     * @response 403 scenario="Client accessing another user's category" {"message": "Forbidden"}
+     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
      */
     public function show(Category $category)
     {
@@ -90,7 +139,19 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a category
+     *
+     * Admins can update any category. Clients can only update their own.
+     *
+     * @authenticated
+     *
+     * @urlParam category int required The ID of the category. Example: 1
+     *
+     * @bodyParam name string required The new name of the category. Example: Apparel
+     *
+     * @response scenario="Success" {"id": 1, "name": "Apparel", "user_id": 5}
+     * @response 403 scenario="Client updating another user's category" {"message": "Forbidden"}
+     * @response 422 scenario="Validation error" {"message": "The name field is required."}
      */
     public function update(Request $request, Category $category)
     {
@@ -110,7 +171,16 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a category
+     *
+     * Admins can delete any category. Clients can only delete their own.
+     *
+     * @authenticated
+     *
+     * @urlParam category int required The ID of the category. Example: 1
+     *
+     * @response scenario="Success" {"message": "Deleted"}
+     * @response 403 scenario="Client deleting another user's category" {"message": "Forbidden"}
      */
     public function destroy(Category $category)
     {
