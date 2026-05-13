@@ -22,6 +22,8 @@ class RoleSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $seedPermissions = [
+            "read-users",
+
             "create-categories", "read-categories", "update-categories", "delete-categories",
 
             "create-own-categories", "read-own-categories", "update-own-categories", "delete-own-categories",
@@ -58,6 +60,8 @@ class RoleSeeder extends Seeder
         $roleAdmin = Role::firstOrCreate(['name' => 'admin']);
 
         $adminPermissions = [
+            "read-users",
+
             "create-categories", "read-categories", "update-categories", "delete-categories",
         ];
 
