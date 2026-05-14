@@ -28,6 +28,10 @@ class RoleSeeder extends Seeder
 
             "create-own-categories", "read-own-categories", "update-own-categories", "delete-own-categories",
 
+            'create-expense', 'read-expense', 'update-expense', 'delete-expense',
+
+            'create-own-expense', 'read-own-expense', 'update-own-expense', 'delete-own-expense',
+
             'user-register'
         ];
 
@@ -63,6 +67,8 @@ class RoleSeeder extends Seeder
             "read-users",
 
             "create-categories", "read-categories", "update-categories", "delete-categories",
+
+            'create-expense', 'read-expense', 'update-expense', 'delete-expense',
         ];
 
         foreach ($adminPermissions as $key => $permission) {
@@ -76,6 +82,8 @@ class RoleSeeder extends Seeder
 
         $clientPermissions = [
             "create-own-categories", "read-own-categories", "update-own-categories", "delete-own-categories",
+
+            'create-own-expense', 'read-own-expense', 'update-own-expense', 'delete-own-expense',
         ];
 
         foreach ($clientPermissions as $key => $permission) {

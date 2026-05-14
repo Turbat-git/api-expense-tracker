@@ -168,7 +168,7 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        if ($user->hasRole('client') && $category->user_id !== $user->id) {
+        if ($user->hasPermissionTo('update-own-categories') && $category->user_id !== $user->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

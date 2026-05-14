@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\ExpenseController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,7 +13,10 @@ Route::get('/health', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'role:client|admin'])->group(function () {
+Route::middleware('auth:sanctum')
+    ->get('/test', fn (Request $r) => $r->user());
+
+Route::middleware(['auth:sanctum', 'role:admin|client'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -22,6 +26,8 @@ Route::middleware(['auth:sanctum', 'role:client|admin'])->group(function () {
     })->middleware('permission:read-users');
 
     Route::apiResource('categories', CategoryController::class);
+
+    Route::apiResource('expenses', ExpenseController::class);
 
     // Logout route
     Route::post('/logout', [AuthController::class, 'logout']);
