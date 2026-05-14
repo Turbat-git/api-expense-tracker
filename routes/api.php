@@ -6,6 +6,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok'
+    ]);
+});
+
 Route::middleware(['auth:sanctum', 'role:client|admin'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -26,6 +32,5 @@ Route::middleware(['auth:sanctum', 'role:client|admin'])->group(function () {
 //Admin Routes
 
 
-Route::post('register', [AuthController::class, 'register'])
-    ->middleware('permission:user-register');
+Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);

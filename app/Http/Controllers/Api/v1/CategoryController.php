@@ -18,7 +18,6 @@ class CategoryController extends Controller
      *
      * Admins receive all categories paginated. Clients only receive their own.
      *
-     * @authenticated
      *
      * @response scenario="Admin: all categories" {
      *   "current_page": 1,
@@ -38,6 +37,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         if ($user->hasRole('admin')) {
             return Category::paginate(10);
         }
@@ -56,8 +60,6 @@ class CategoryController extends Controller
      *
      * Admins can assign a category to any user. Clients create categories for themselves only.
      *
-     * @authenticated
-     *
      * @bodyParam name string required The name of the category. Example: Electronics
      * @bodyParam user_id int The ID of the user to assign the category to (admin only). Example: 5
      *
@@ -68,6 +70,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         if ($user->hasRole('admin')) {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -104,8 +111,6 @@ class CategoryController extends Controller
      *
      * Admins can view any category. Clients can only view their own.
      *
-     * @authenticated
-     *
      * @urlParam category int required The ID of the category. Example: 1
      *
      * @response scenario="Success" {"id": 1, "name": "Electronics", "user_id": 5}
@@ -119,6 +124,10 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
         if ($user->hasRole('admin')) {
             return response()->json($category);
@@ -143,8 +152,6 @@ class CategoryController extends Controller
      *
      * Admins can update any category. Clients can only update their own.
      *
-     * @authenticated
-     *
      * @urlParam category int required The ID of the category. Example: 1
      *
      * @bodyParam name string required The new name of the category. Example: Apparel
@@ -156,6 +163,10 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
         if ($user->hasRole('client') && $category->user_id !== $user->id) {
             return response()->json(['message' => 'Forbidden'], 403);
@@ -175,7 +186,6 @@ class CategoryController extends Controller
      *
      * Admins can delete any category. Clients can only delete their own.
      *
-     * @authenticated
      *
      * @urlParam category int required The ID of the category. Example: 1
      *
@@ -185,6 +195,10 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
         if ($user->hasRole('client') && $category->user_id !== $user->id) {
             return response()->json(['message' => 'Forbidden'], 403);
