@@ -25,9 +25,30 @@ Route::middleware(['auth:sanctum', 'role:admin|client'])->group(function () {
         return User::paginate(15);
     })->middleware('permission:read-users');
 
-    Route::apiResource('categories', CategoryController::class);
+    // Category Routes
 
-    Route::apiResource('expenses', ExpenseController::class);
+    Route::apiResource('categories', CategoryController::class)->middleware([
+        'index' => 'permission:read-categories|read-own-categories',
+        'show' => 'permission:read-categories|read-own-categories',
+
+        'store' => 'permission:create-categories|create-own-categories',
+
+        'update' => 'permission:update-categories|update-own-categories',
+
+        'destroy' => 'permission:delete-categories|delete-own-categories',
+    ]);
+
+    // Expenses Routes
+    Route::apiResource('expenses', ExpenseController::class)->middleware([
+        'index' => 'permission:read-expense|read-own-expense',
+        'show' => 'permission:read-expense|read-own-expense',
+
+        'store' => 'permission:create-expense|create-own-expense',
+
+        'update' => 'permission:update-expense|update-own-expense',
+
+        'destroy' => 'permission:delete-expense|delete-own-expense',
+    ]);
 
     // Logout route
     Route::post('/logout', [AuthController::class, 'logout']);

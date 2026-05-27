@@ -1,19 +1,19 @@
-name: Authentication
-description: ''
+name: 'Expense Controller'
+description: 'APIs for Expense'
 endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/logout
+      - GET
+    uri: api/expenses
     metadata:
       custom: []
-      groupName: Authentication
-      groupDescription: ''
+      groupName: 'Expense Controller'
+      groupDescription: 'APIs for Expense'
       subgroup: ''
       subgroupDescription: ''
-      title: Logout
-      description: 'Revoke the current access token.'
+      title: 'List expenses'
+      description: 'Admins receive all expenses paginated. Clients only receive their own.'
       authenticated: true
       deprecated: false
     headers:
@@ -33,10 +33,43 @@ endpoints:
         status: 200
         content: |-
           {
-            "message": "Logout Successful"
+            "current_page": 1,
+            "data": [{
+              "id": 1,
+              "amount": 15.50,
+              "description": "Lunch",
+              "category_id": 1,
+              "user_id": 5
+            }],
+            "per_page": 10,
+            "total": 50
           }
         headers: []
-        description: ''
+        description: 'Admin: all expenses'
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "current_page": 1,
+            "data": [{
+              "id": 1,
+              "amount": 15.50,
+              "description": "Lunch",
+              "category_id": 1,
+              "user_id": 3
+            }],
+            "per_page": 10,
+            "total": 5
+          }
+        headers: []
+        description: 'Client: own expenses'
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Unauthorized role"}'
+        headers: []
+        description: 'Unauthorized role'
     responseFields: []
     auth:
       - headers
@@ -49,18 +82,21 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/register
+    uri: api/expenses
     metadata:
       custom: []
-      groupName: Authentication
-      groupDescription: ''
+      groupName: 'Expense Controller'
+      groupDescription: 'APIs for Expense'
       subgroup: ''
       subgroupDescription: ''
-      title: Register
-      description: 'Create a new user account and return an access token.'
-      authenticated: false
+      title: 'Create an expense'
+      description: |-
+        Admins can assign an expense to any user.
+        Clients create expenses for themselves only.
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -68,67 +104,55 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      given_name:
+      amount:
         custom: []
-        name: given_name
-        description: 'First name.'
+        name: amount
+        description: 'The amount of the expense.'
         required: true
-        example: John
+        example: 15.5
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Description of the expense.'
+        required: true
+        example: Lunch
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      family_name:
+      category_id:
         custom: []
-        name: family_name
-        description: 'Last name.'
-        required: true
-        example: Doe
-        type: string
+        name: category_id
+        description: 'The ID of the category.'
+        required: false
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      email:
+      user_id:
         custom: []
-        name: email
-        description: 'User email address.'
-        required: true
-        example: john@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      password:
-        custom: []
-        name: password
-        description: 'Password (min 8 chars).'
-        required: true
-        example: password123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      password_confirmation:
-        custom: []
-        name: password_confirmation
-        description: 'Must match password.'
-        required: true
-        example: password123
-        type: string
+        name: user_id
+        description: 'The ID of the user to assign the expense to (admin only).'
+        required: false
+        example: 5
+        type: integer
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      given_name: John
-      family_name: Doe
-      email: john@example.com
-      password: password123
-      password_confirmation: password123
+      amount: 15.5
+      description: Lunch
+      category_id: 1
+      user_id: 5
     fileParameters: []
     responses:
       -
@@ -136,91 +160,85 @@ endpoints:
         status: 201
         content: |-
           {
-            "access_token": "1|laravel-sanctum-token",
-            "token_type": "Bearer",
-            "user": {
-              "id": 1,
-              "given_name": "John",
-              "family_name": "Doe",
-              "email": "john@example.com"
-            }
+            "id": 1,
+            "amount": 15.50,
+            "description": "Lunch",
+            "category_id": 1,
+            "user_id": 5
           }
         headers: []
-        description: ''
+        description: Success
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Unauthorized role"}'
+        headers: []
+        description: 'Unauthorized role'
       -
         custom: []
         status: 422
-        content: |-
-          {
-            "message": "The given data was invalid."
-          }
+        content: '{"message": "The given data was invalid."}'
         headers: []
-        description: ''
+        description: 'Validation error'
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
     controller: null
     method: null
     route: null
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/login
+      - GET
+    uri: 'api/expenses/{id}'
     metadata:
       custom: []
-      groupName: Authentication
-      groupDescription: ''
+      groupName: 'Expense Controller'
+      groupDescription: 'APIs for Expense'
       subgroup: ''
       subgroupDescription: ''
-      title: Login
-      description: 'Authenticate a user and return an access token.'
-      authenticated: false
+      title: 'Get an expense'
+      description: |-
+        Admins can view any expense.
+        Clients can only view their own.
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      expense:
+        custom: []
+        name: expense
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+      expense: 1
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      email:
-        custom: []
-        name: email
-        description: 'User email address.'
-        required: true
-        example: john@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      password:
-        custom: []
-        name: password
-        description: 'User password.'
-        required: true
-        example: password123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      device_name:
-        custom: []
-        name: device_name
-        description: 'Optional device name for token identification.'
-        required: false
-        example: 'iPhone 15'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      email: john@example.com
-      password: password123
-      device_name: 'iPhone 15'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
@@ -228,22 +246,227 @@ endpoints:
         status: 200
         content: |-
           {
-            "access_token": "1|laravel-sanctum-token",
-            "token_type": "Bearer"
+            "id": 1,
+            "amount": 15.50,
+            "description": "Lunch",
+            "category_id": 1,
+            "user_id": 5
           }
         headers: []
-        description: ''
+        description: Success
       -
         custom: []
-        status: 401
+        status: 403
+        content: '{"message": "Forbidden"}'
+        headers: []
+        description: "Client accessing another user's expense"
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Unauthorized role"}'
+        headers: []
+        description: 'Unauthorized role'
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/expenses/{id}'
+    metadata:
+      custom: []
+      groupName: 'Expense Controller'
+      groupDescription: 'APIs for Expense'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update an expense'
+      description: |-
+        Admins can update any expense.
+        Clients can only update their own.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      expense:
+        custom: []
+        name: expense
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+      expense: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount:
+        custom: []
+        name: amount
+        description: 'The updated expense amount.'
+        required: false
+        example: 25.75
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'The updated description.'
+        required: false
+        example: Dinner
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'The updated category ID.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount: 25.75
+      description: Dinner
+      category_id: 2
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
         content: |-
           {
-            "message": "Incorrect Password"
+            "id": 1,
+            "amount": 25.75,
+            "description": "Dinner",
+            "category_id": 2,
+            "user_id": 5
           }
         headers: []
-        description: ''
+        description: Success
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Forbidden"}'
+        headers: []
+        description: "Client updating another user's expense"
+      -
+        custom: []
+        status: 422
+        content: '{"message": "The given data was invalid."}'
+        headers: []
+        description: 'Validation error'
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/expenses/{id}'
+    metadata:
+      custom: []
+      groupName: 'Expense Controller'
+      groupDescription: 'APIs for Expense'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete an expense'
+      description: |-
+        Admins can delete any expense.
+        Clients can only delete their own.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      expense:
+        custom: []
+        name: expense
+        description: 'The ID of the expense.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+      expense: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"message": "Deleted"}'
+        headers: []
+        description: Success
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Forbidden"}'
+        headers: []
+        description: "Client deleting another user's expense"
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
     controller: null
     method: null
     route: null

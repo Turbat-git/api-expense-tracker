@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group("Authentication", "APIs for Authentication")]
 class AuthController extends Controller
 {
     /**
@@ -14,7 +16,6 @@ class AuthController extends Controller
      *
      * Authenticate a user and return an access token.
      *
-     * @group Authentication
      * @unauthenticated
      *
      * @bodyParam email string required User email address. Example: john@example.com
@@ -59,7 +60,6 @@ class AuthController extends Controller
      *
      * Revoke the current access token.
      *
-     * @group Authentication
      *
      * @response 200 {
      *   "message": "Logout Successful"
@@ -78,7 +78,6 @@ class AuthController extends Controller
      *
      * Create a new user account and return an access token.
      *
-     * @group Authentication
      * @unauthenticated
      *
      * @bodyParam given_name string required First name. Example: John

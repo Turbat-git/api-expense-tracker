@@ -1,7 +1,5 @@
 name: 'Category Controller'
-description: |-
-
-  APIs for CRUD operation with Category
+description: 'APIs for Category'
 endpoints:
   -
     custom: []
@@ -11,9 +9,7 @@ endpoints:
     metadata:
       custom: []
       groupName: 'Category Controller'
-      groupDescription: |-
-
-        APIs for CRUD operation with Category
+      groupDescription: 'APIs for Category'
       subgroup: ''
       subgroupDescription: ''
       title: 'List categories'
@@ -78,9 +74,7 @@ endpoints:
     metadata:
       custom: []
       groupName: 'Category Controller'
-      groupDescription: |-
-
-        APIs for CRUD operation with Category
+      groupDescription: 'APIs for Category'
       subgroup: ''
       subgroupDescription: ''
       title: 'Create a category'
@@ -157,9 +151,7 @@ endpoints:
     metadata:
       custom: []
       groupName: 'Category Controller'
-      groupDescription: |-
-
-        APIs for CRUD operation with Category
+      groupDescription: 'APIs for Category'
       subgroup: ''
       subgroupDescription: ''
       title: 'Get a category'
@@ -270,9 +262,7 @@ endpoints:
     metadata:
       custom: []
       groupName: 'Category Controller'
-      groupDescription: |-
-
-        APIs for CRUD operation with Category
+      groupDescription: 'APIs for Category'
       subgroup: ''
       subgroupDescription: ''
       title: 'Update a category'
@@ -361,9 +351,7 @@ endpoints:
     metadata:
       custom: []
       groupName: 'Category Controller'
-      groupDescription: |-
-
-        APIs for CRUD operation with Category
+      groupDescription: 'APIs for Category'
       subgroup: ''
       subgroupDescription: ''
       title: 'Delete a category'

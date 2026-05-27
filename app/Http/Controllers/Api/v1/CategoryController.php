@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Knuckles\Scribe\Attributes\Group;
 
-/**
- * @group Category Controller
- *
- * APIs for CRUD operation with Category
- */
+#[Group("Category Controller", "APIs for Category")]
 class CategoryController extends Controller
 {
     /**

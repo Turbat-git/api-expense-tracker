@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group("Expense Controller", "APIs for Expense")]
 class ExpenseController extends Controller
 {
     /**
+     *
      * List expenses
      *
      * Admins receive all expenses paginated. Clients only receive their own.
@@ -99,7 +102,7 @@ class ExpenseController extends Controller
 
             $validated = $request->validate([
                 'amount' => 'required|numeric|min:0',
-                'description' => 'required|string|max:255',
+                'description' => 'nullable|string|max:255',
                 'category_id' => 'nullable|exists:categories,id',
             ]);
 
