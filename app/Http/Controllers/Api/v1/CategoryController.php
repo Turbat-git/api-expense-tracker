@@ -73,10 +73,12 @@ class CategoryController extends Controller
         }
 
         if ($user->hasRole('admin')) {
-            $validated = $request->validate([
+            $validated = $request->validate(
+                [
                 'name' => 'required|string|max:255',
                 'user_id' => 'required|exists:users,id'
-            ]);
+                ]
+            );
 
             $category = Category::create([
                 'name' => $validated['name'],
