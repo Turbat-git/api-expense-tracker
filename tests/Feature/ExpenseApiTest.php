@@ -111,17 +111,19 @@ class ExpenseApiTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
-    public function test_prevents_admin_from_accessing_expenses_index(): void
+    public function test_admin_accessing_expenses_index(): void
     {
         Sanctum::actingAs($this->admin);
+
+        Expense::factory()->create([
+            'user_id' => $this->otherClient->id
+        ]);
 
         $response = $this->getJson('/api/expenses');
 
         $response
-            ->assertStatus(403)
-            ->assertJson([
-                'message' => 'Unauthorized role'
-            ]);
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'data');
     }
 
     //

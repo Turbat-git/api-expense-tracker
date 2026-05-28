@@ -61,6 +61,11 @@ class ExpenseController extends Controller
                 ->paginate(10);
         }
 
+        if ($user->hasRole('admin')) {
+            return Expense::with('category')
+                ->paginate(10);
+        }
+
         return response()->json([
             'message' => 'Unauthorized role'
         ], 403);
