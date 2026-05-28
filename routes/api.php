@@ -28,49 +28,50 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+Route::middleware('throttle:20,1')->group(function () {
+    // Categories
+    Route::middleware('auth:sanctum')
+        ->get('/categories', [CategoryController::class, 'index'])
+        ->middleware('permission:read-categories|read-own-categories');
 
-// Categories
-Route::middleware('auth:sanctum')
-    ->get('/categories', [CategoryController::class, 'index'])
-    ->middleware('permission:read-categories|read-own-categories');
+    Route::middleware('auth:sanctum')
+        ->get('/categories/{category}', [CategoryController::class, 'show'])
+        ->middleware('permission:read-categories|read-own-categories');
 
-Route::middleware('auth:sanctum')
-    ->get('/categories/{category}', [CategoryController::class, 'show'])
-    ->middleware('permission:read-categories|read-own-categories');
+    Route::middleware('auth:sanctum')
+        ->post('/categories', [CategoryController::class, 'store'])
+        ->middleware('permission:create-categories|create-own-categories');
 
-Route::middleware('auth:sanctum')
-    ->post('/categories', [CategoryController::class, 'store'])
-    ->middleware('permission:create-categories|create-own-categories');
+    Route::middleware('auth:sanctum')
+        ->patch('/categories/{category}', [CategoryController::class, 'update'])
+        ->middleware('permission:update-categories|update-own-categories');
 
-Route::middleware('auth:sanctum')
-    ->patch('/categories/{category}', [CategoryController::class, 'update'])
-    ->middleware('permission:update-categories|update-own-categories');
+    Route::middleware('auth:sanctum')
+        ->delete('/categories/{category}', [CategoryController::class, 'destroy'])
+        ->middleware('permission:delete-categories|delete-own-categories');
 
-Route::middleware('auth:sanctum')
-    ->delete('/categories/{category}', [CategoryController::class, 'destroy'])
-    ->middleware('permission:delete-categories|delete-own-categories');
+    // Expenses
+    Route::middleware('auth:sanctum')
+        ->get('/expenses', [ExpenseController::class, 'index'])
+        ->middleware('permission:read-expense|read-own-expense');
 
-// Expenses
-Route::middleware('auth:sanctum')
-    ->get('/expenses', [ExpenseController::class, 'index'])
-    ->middleware('permission:read-expense|read-own-expense');
+    Route::middleware('auth:sanctum')
+        ->get('/expenses/{expense}', [ExpenseController::class, 'show'])
+        ->middleware('permission:read-expense|read-own-expense');
 
-Route::middleware('auth:sanctum')
-    ->get('/expenses/{expense}', [ExpenseController::class, 'show'])
-    ->middleware('permission:read-expense|read-own-expense');
+    Route::middleware('auth:sanctum')
+        ->post('/expenses', [ExpenseController::class, 'store'])
+        ->middleware('permission:create-expense|create-own-expense');
 
-Route::middleware('auth:sanctum')
-    ->post('/expenses', [ExpenseController::class, 'store'])
-    ->middleware('permission:create-expense|create-own-expense');
+    Route::middleware('auth:sanctum')
+        ->patch('/expenses/{expense}', [ExpenseController::class, 'update'])
+        ->middleware('permission:update-expense|update-own-expense');
 
-Route::middleware('auth:sanctum')
-    ->patch('/expenses/{expense}', [ExpenseController::class, 'update'])
-    ->middleware('permission:update-expense|update-own-expense');
+    Route::middleware('auth:sanctum')
+        ->delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])
+        ->middleware('permission:delete-expense|delete-own-expense');
 
-Route::middleware('auth:sanctum')
-    ->delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])
-    ->middleware('permission:delete-expense|delete-own-expense');
-
+});
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
