@@ -43,10 +43,6 @@ Route::middleware('auth:sanctum')
     ->middleware('permission:create-categories|create-own-categories');
 
 Route::middleware('auth:sanctum')
-    ->put('/categories/{category}', [CategoryController::class, 'update'])
-    ->middleware('permission:update-categories|update-own-categories');
-
-Route::middleware('auth:sanctum')
     ->patch('/categories/{category}', [CategoryController::class, 'update'])
     ->middleware('permission:update-categories|update-own-categories');
 
@@ -66,10 +62,6 @@ Route::middleware('auth:sanctum')
 Route::middleware('auth:sanctum')
     ->post('/expenses', [ExpenseController::class, 'store'])
     ->middleware('permission:create-expense|create-own-expense');
-
-Route::middleware('auth:sanctum')
-    ->put('/expenses/{expense}', [ExpenseController::class, 'update'])
-    ->middleware('permission:update-expense|update-own-expense');
 
 Route::middleware('auth:sanctum')
     ->patch('/expenses/{expense}', [ExpenseController::class, 'update'])
