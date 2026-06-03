@@ -43,16 +43,30 @@ class AuthController extends Controller
 
         // check password
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Incorrect Password'], 401);
+            return response()->json(
+                [
+                    'success' => false,
+                    'data'=>
+                        [
+                            'message' => 'Incorrect Password',
+                        ],
+                    'response_code'=>401
+                ], 401);
         }
 
         // return token
         $token = $user->createToken($request->given_name ?? 'unknown-name')->plainTextToken;
 
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+            'success' => true,
+            'data' =>
+                [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'message' => 'Logged in successfully.',
+                ],
+            'response_code'=>200,
+        ], 200);
     }
 
     /**
@@ -70,7 +84,15 @@ class AuthController extends Controller
         // delete token
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logout Successful'], 200);
+        return response()->json(
+            [
+                'success'=>true,
+                'data' =>
+                    [
+                    'message' => 'Logout Successful',
+                    ],
+                'response_code'=>200,
+            ],200);
     }
 
     /**
@@ -124,9 +146,14 @@ class AuthController extends Controller
         $user->assignRole('client');
 
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
+            'success' => true,
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'message' => 'Registration Successful',
+                'user' => $user
+            ],
+            'response_code'=>201,
         ], 201);
     }
 }

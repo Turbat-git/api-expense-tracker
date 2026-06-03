@@ -1,397 +1,295 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
 
-class ExpenseApiTest extends TestCase
-{
-    use RefreshDatabase;
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-    protected User $client;
-    protected User $admin;
-    protected User $otherClient;
+beforeEach(function () {
+    $this->seed(RoleSeeder::class);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $this->client = User::factory()->create();
+    $this->client->assignRole('client');
 
-        $this->seed(RoleSeeder::class);
+    $this->admin = User::factory()->create();
+    $this->admin->assignRole('admin');
 
-        $this->client = User::factory()->create();
-        $this->client->assignRole('client');
+    $this->otherClient = User::factory()->create();
+    $this->otherClient->assignRole('client');
+});
 
-        $this->admin = User::factory()->create();
-        $this->admin->assignRole('admin');
+test('returns api health status', function () {
+    $response = $this->getJson('/api/health');
 
-        $this->otherClient = User::factory()->create();
-        $this->otherClient->assignRole('client');
-    }
-
-    //
-    // HEALTH CHECK
-    //
-
-    public function test_returns_api_health_status(): void
-    {
-        $response = $this->getJson('/api/health');
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'status' => 'ok'
-            ]);
-    }
-
-    //
-    // AUTHENTICATION TESTS
-    //
-
-    public function test_rejects_unauthenticated_expense_index_requests(): void
-    {
-        $response = $this->getJson('/api/expenses');
-
-        $response->assertStatus(401);
-    }
-
-    public function test_rejects_unauthenticated_expense_creation(): void
-    {
-        $response = $this->postJson('/api/expenses', [
-            'amount' => 100
+    $response
+        ->assertStatus(200)
+        ->assertJson([
+            'status' => 'ok'
         ]);
+});
 
-        $response->assertStatus(401);
-    }
+test('allows clients to create expenses', function () {
+    Sanctum::actingAs($this->client);
 
-    public function test_rejects_unauthenticated_expense_updates(): void
-    {
-        $expense = Expense::factory()->create();
+    $response = $this->postJson('/api/expenses', [
+        'amount' => 99.50,
+        'description' => 'Fuel'
+    ]);
 
-        $response = $this->patchJson("/api/expenses/{$expense->id}", [
-            'amount' => 50
-        ]);
-
-        $response->assertStatus(401);
-    }
-
-    public function test_rejects_unauthenticated_expense_deletion(): void
-    {
-        $expense = Expense::factory()->create();
-
-        $response = $this->deleteJson("/api/expenses/{$expense->id}");
-
-        $response->assertStatus(401);
-    }
-
-    //
-    // INDEX TESTS
-    //
-    public function test_allows_clients_to_view_their_own_expenses_only(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        Expense::factory()->create([
-            'user_id' => $this->client->id
-        ]);
-
-        Expense::factory()->create([
-            'user_id' => $this->otherClient->id
-        ]);
-
-        $response = $this->getJson('/api/expenses');
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonCount(1, 'data');
-    }
-
-    public function test_admin_accessing_expenses_index(): void
-    {
-        Sanctum::actingAs($this->admin);
-
-        Expense::factory()->create([
-            'user_id' => $this->otherClient->id
-        ]);
-
-        $response = $this->getJson('/api/expenses');
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonCount(1, 'data');
-    }
-
-    //
-    // STORE TESTS
-    //
-    public function test_allows_clients_to_create_expenses(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $response = $this->postJson('/api/expenses', [
+    $response
+        ->assertStatus(201)
+        ->assertJson([
             'amount' => 99.50,
-            'description' => 'Fuel'
-        ]);
-
-        $response
-            ->assertStatus(201)
-            ->assertJson([
-                'amount' => 99.50,
-                'description' => 'Fuel',
-                'user_id' => $this->client->id
-            ]);
-
-        $this->assertDatabaseHas('expenses', [
-            'description' => 'Fuel'
-        ]);
-    }
-
-    public function test_validates_required_amount_when_creating_expense(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $response = $this->postJson('/api/expenses', [
-            'description' => 'Fuel'
-        ]);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['amount']);
-    }
-
-    public function test_validates_amount_must_be_numeric(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $response = $this->postJson('/api/expenses', [
-            'amount' => 'invalid'
-        ]);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['amount']);
-    }
-
-    public function test_rejects_invalid_category_ids(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $response = $this->postJson('/api/expenses', [
-            'amount' => 50,
-            'category_id' => 999
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-    public function test_rejects_categories_belonging_to_another_user(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $category = Category::factory()->create([
-            'user_id' => $this->otherClient->id
-        ]);
-
-        $response = $this->postJson('/api/expenses', [
-            'amount' => 50,
-            'category_id' => $category->id
-        ]);
-
-        $response
-            ->assertStatus(422)
-            ->assertJson([
-                'message' => 'Invalid category'
-            ]);
-    }
-
-    //
-    // SHOW TESTS
-    //
-
-    public function test_allows_clients_to_view_their_own_expense(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $expense = Expense::factory()->create([
+            'description' => 'Fuel',
             'user_id' => $this->client->id
         ]);
 
-        $response = $this->getJson("/api/expenses/{$expense->id}");
+    $this->assertDatabaseHas('expenses', [
+        'description' => 'Fuel'
+    ]);
+});
 
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'id' => $expense->id
-            ]);
-    }
+test('allows clients to view their own expenses only', function () {
+    Sanctum::actingAs($this->client);
 
-    public function test_prevents_clients_from_viewing_another_users_expense(): void
-    {
-        Sanctum::actingAs($this->client);
+    Expense::factory()->create([
+        'user_id' => $this->client->id
+    ]);
 
-        $expense = Expense::factory()->create([
-            'user_id' => $this->otherClient->id
+    Expense::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
+
+    $response = $this->getJson('/api/expenses');
+
+    $response
+        ->assertStatus(200)
+        ->assertJsonCount(1, 'data');
+});
+
+test('admin accessing expenses index', function () {
+    Sanctum::actingAs($this->admin);
+
+    Expense::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
+
+    $response = $this->getJson('/api/expenses');
+
+    $response
+        ->assertStatus(200)
+        ->assertJsonCount(1, 'data');
+});
+
+test('validates required amount when creating expense', function () {
+    Sanctum::actingAs($this->client);
+
+    $response = $this->postJson('/api/expenses', [
+        'description' => 'Fuel'
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['amount']);
+});
+
+test('validates amount must be numeric', function () {
+    Sanctum::actingAs($this->client);
+
+    $response = $this->postJson('/api/expenses', [
+        'amount' => 'invalid'
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['amount']);
+});
+
+test('rejects invalid category ids', function () {
+    Sanctum::actingAs($this->client);
+
+    $response = $this->postJson('/api/expenses', [
+        'amount' => 50,
+        'category_id' => 999
+    ]);
+
+    $response->assertStatus(422);
+});
+
+test('rejects categories belonging to another user', function () {
+    Sanctum::actingAs($this->client);
+
+    $category = Category::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
+
+    $response = $this->postJson('/api/expenses', [
+        'amount' => 50,
+        'category_id' => $category->id
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJson([
+            'message' => 'Invalid category'
         ]);
+});
 
-        $response = $this->getJson("/api/expenses/{$expense->id}");
+test('allows clients to view their own expense', function () {
+    Sanctum::actingAs($this->client);
 
-        $response
-            ->assertStatus(403)
-            ->assertJson([
-                'message' => 'Forbidden'
-            ]);
-    }
+    $expense = Expense::factory()->create([
+        'user_id' => $this->client->id
+    ]);
 
-    //
-    // PATCH UPDATE TESTS
-    //
+    $response = $this->getJson("/api/expenses/{$expense->id}");
 
-    public function test_allows_partial_expense_updates(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $expense = Expense::factory()->create([
-            'user_id' => $this->client->id,
-            'description' => 'Old'
-        ]);
-
-        $response = $this->patchJson("/api/expenses/{$expense->id}", [
-            'description' => 'Updated'
-        ]);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'description' => 'Updated'
-            ]);
-
-        $this->assertDatabaseHas('expenses', [
-            'id' => $expense->id,
-            'description' => 'Updated'
-        ]);
-    }
-
-    public function test_prevents_clients_from_updating_another_users_expense(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $expense = Expense::factory()->create([
-            'user_id' => $this->otherClient->id
-        ]);
-
-        $response = $this->patchJson("/api/expenses/{$expense->id}", [
-            'description' => 'Hacked'
-        ]);
-
-        $response
-            ->assertStatus(403)
-            ->assertJson([
-                'message' => 'Forbidden'
-            ]);
-    }
-
-    public function test_validates_update_amount_is_numeric(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $expense = Expense::factory()->create([
-            'user_id' => $this->client->id
-        ]);
-
-        $response = $this->patchJson("/api/expenses/{$expense->id}", [
-            'amount' => 'bad-value'
-        ]);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['amount']);
-    }
-
-    //
-    // DELETE TESTS
-    //
-
-    public function test_allows_clients_to_delete_their_own_expense(): void
-    {
-        Sanctum::actingAs($this->client);
-
-        $expense = Expense::factory()->create([
-            'user_id' => $this->client->id
-        ]);
-
-        $response = $this->deleteJson("/api/expenses/{$expense->id}");
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'message' => 'Deleted'
-            ]);
-
-        $this->assertDatabaseMissing('expenses', [
+    $response
+        ->assertStatus(200)
+        ->assertJson([
             'id' => $expense->id
         ]);
-    }
+});
 
-    public function test_prevents_clients_from_deleting_another_users_expense(): void
-    {
-        Sanctum::actingAs($this->client);
+test('prevents clients from viewing another users expense', function () {
+    Sanctum::actingAs($this->client);
 
-        $expense = Expense::factory()->create([
-            'user_id' => $this->otherClient->id
+    $expense = Expense::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
+
+    $response = $this->getJson("/api/expenses/{$expense->id}");
+
+    $response
+        ->assertStatus(403)
+        ->assertJson([
+            'message' => 'Forbidden'
+        ]);
+});
+
+test('allows partial expense updates', function () {
+    Sanctum::actingAs($this->client);
+
+    $expense = Expense::factory()->create([
+        'user_id' => $this->client->id,
+        'description' => 'Old'
+    ]);
+
+    $response = $this->patchJson("/api/expenses/{$expense->id}", [
+        'description' => 'Updated'
+    ]);
+
+    $response
+        ->assertStatus(200)
+        ->assertJson([
+            'description' => 'Updated'
         ]);
 
-        $response = $this->deleteJson("/api/expenses/{$expense->id}");
+    $this->assertDatabaseHas('expenses', [
+        'id' => $expense->id,
+        'description' => 'Updated'
+    ]);
+});
 
-        $response
-            ->assertStatus(403)
-            ->assertJson([
-                'message' => 'Forbidden'
-            ]);
-    }
+test('prevents clients from updating another users expense', function () {
+    Sanctum::actingAs($this->client);
 
-    //
-    // USER ROUTE TESTS
-    //
+    $expense = Expense::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
 
-    public function test_allows_authenticated_users_to_access_user_endpoint(): void
-    {
-        Sanctum::actingAs($this->client);
+    $response = $this->patchJson("/api/expenses/{$expense->id}", [
+        'description' => 'Hacked'
+    ]);
 
-        $response = $this->getJson('/api/user');
+    $response
+        ->assertStatus(403)
+        ->assertJson([
+            'message' => 'Forbidden'
+        ]);
+});
 
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'id' => $this->client->id
-            ]);
-    }
+test('validates update amount is numeric', function () {
+    Sanctum::actingAs($this->client);
 
-    //
-    // USERS PERMISSION ROUTE TESTS
-    //
+    $expense = Expense::factory()->create([
+        'user_id' => $this->client->id
+    ]);
 
-    public function test_prevents_users_without_permission_from_viewing_users_list(): void
-    {
-        Sanctum::actingAs($this->client);
+    $response = $this->patchJson("/api/expenses/{$expense->id}", [
+        'amount' => 'bad-value'
+    ]);
 
-        $response = $this->getJson('/api/users');
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['amount']);
+});
 
-        $response->assertStatus(403);
-    }
+test('allows clients to delete their own expense', function () {
+    Sanctum::actingAs($this->client);
 
-    public function test_allows_users_with_permission_to_view_users_list(): void
-    {
-        $this->admin->givePermissionTo('read-users');
+    $expense = Expense::factory()->create([
+        'user_id' => $this->client->id
+    ]);
 
-        Sanctum::actingAs($this->admin);
+    $response = $this->deleteJson("/api/expenses/{$expense->id}");
 
-        $response = $this->getJson('/api/users');
+    $response
+        ->assertStatus(200)
+        ->assertJson([
+            'message' => 'Deleted'
+        ]);
 
-        $response->assertStatus(200);
-    }
-}
+    $this->assertDatabaseMissing('expenses', [
+        'id' => $expense->id
+    ]);
+});
+
+test('prevents clients from deleting another users expense', function () {
+    Sanctum::actingAs($this->client);
+
+    $expense = Expense::factory()->create([
+        'user_id' => $this->otherClient->id
+    ]);
+
+    $response = $this->deleteJson("/api/expenses/{$expense->id}");
+
+    $response
+        ->assertStatus(403)
+        ->assertJson([
+            'message' => 'Forbidden'
+        ]);
+});
+
+test('allows authenticated users to access user endpoint', function () {
+    Sanctum::actingAs($this->client);
+
+    $response = $this->getJson('/api/user');
+
+    $response
+        ->assertStatus(200)
+        ->assertJson([
+            'id' => $this->client->id
+        ]);
+});
+
+test('prevents users without permission from viewing users list', function () {
+    Sanctum::actingAs($this->client);
+
+    $response = $this->getJson('/api/users');
+
+    $response->assertStatus(403);
+});
+
+test('allows users with permission to view users list', function () {
+    $this->admin->givePermissionTo('read-users');
+
+    Sanctum::actingAs($this->admin);
+
+    $response = $this->getJson('/api/users');
+
+    $response->assertStatus(200);
+});
