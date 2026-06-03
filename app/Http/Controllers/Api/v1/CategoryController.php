@@ -75,7 +75,7 @@ class CategoryController extends Controller
         if ($user->hasRole('admin')) {
             $validated = $request->validate(
                 [
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:64',
                 'user_id' => 'required|exists:users,id'
                 ]
             );
@@ -89,7 +89,7 @@ class CategoryController extends Controller
         }
         elseif ($user->hasRole('client')) {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:64',
             ]);
 
             $category = Category::create([
@@ -172,7 +172,7 @@ class CategoryController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:64',
         ]);
 
         $category->update($validated);

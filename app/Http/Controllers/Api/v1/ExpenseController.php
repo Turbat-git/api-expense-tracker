@@ -107,7 +107,7 @@ class ExpenseController extends Controller
 
             $validated = $request->validate([
                 'amount' => 'required|numeric|min:0',
-                'description' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:64',
                 'category_id' => 'nullable|exists:categories,id',
             ]);
 
@@ -226,7 +226,7 @@ class ExpenseController extends Controller
 
         $validated = $request->validate([
             'amount' => 'sometimes|numeric|min:0',
-            'description' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string|max:64',
             'category_id' => 'nullable|exists:categories,id',
         ]);
 
