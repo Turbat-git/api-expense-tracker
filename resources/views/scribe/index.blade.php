@@ -90,17 +90,17 @@
                                                     <li class="tocify-item level-2" data-unique="category-controller-GETapi-categories">
                                 <a href="#category-controller-GETapi-categories">List categories</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="category-controller-GETapi-categories--category_id-">
+                                <a href="#category-controller-GETapi-categories--category_id-">Get a category</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="category-controller-POSTapi-categories">
                                 <a href="#category-controller-POSTapi-categories">Create a category</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="category-controller-GETapi-categories--id-">
-                                <a href="#category-controller-GETapi-categories--id-">Get a category</a>
+                                                                                <li class="tocify-item level-2" data-unique="category-controller-PATCHapi-categories--category_id-">
+                                <a href="#category-controller-PATCHapi-categories--category_id-">Update a category</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="category-controller-PUTapi-categories--id-">
-                                <a href="#category-controller-PUTapi-categories--id-">Update a category</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="category-controller-DELETEapi-categories--id-">
-                                <a href="#category-controller-DELETEapi-categories--id-">Delete a category</a>
+                                                                                <li class="tocify-item level-2" data-unique="category-controller-DELETEapi-categories--category_id-">
+                                <a href="#category-controller-DELETEapi-categories--category_id-">Delete a category</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -109,7 +109,10 @@
                     <a href="#endpoints">Endpoints</a>
                 </li>
                                     <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-health">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-debug-auth">
+                                <a href="#endpoints-GETapi-debug-auth">GET api/debug-auth</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-health">
                                 <a href="#endpoints-GETapi-health">GET api/health</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-test">
@@ -131,17 +134,17 @@
                                                     <li class="tocify-item level-2" data-unique="expense-controller-GETapi-expenses">
                                 <a href="#expense-controller-GETapi-expenses">List expenses</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="expense-controller-GETapi-expenses--expense_id-">
+                                <a href="#expense-controller-GETapi-expenses--expense_id-">Get an expense</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="expense-controller-POSTapi-expenses">
                                 <a href="#expense-controller-POSTapi-expenses">Create an expense</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="expense-controller-GETapi-expenses--id-">
-                                <a href="#expense-controller-GETapi-expenses--id-">Get an expense</a>
+                                                                                <li class="tocify-item level-2" data-unique="expense-controller-PATCHapi-expenses--expense_id-">
+                                <a href="#expense-controller-PATCHapi-expenses--expense_id-">Update an expense</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="expense-controller-PUTapi-expenses--id-">
-                                <a href="#expense-controller-PUTapi-expenses--id-">Update an expense</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="expense-controller-DELETEapi-expenses--id-">
-                                <a href="#expense-controller-DELETEapi-expenses--id-">Delete an expense</a>
+                                                                                <li class="tocify-item level-2" data-unique="expense-controller-DELETEapi-expenses--expense_id-">
+                                <a href="#expense-controller-DELETEapi-expenses--expense_id-">Delete an expense</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -154,7 +157,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: May 27, 2026</li>
+        <li>Last updated: June 4, 2026</li>
     </ul>
 </div>
 
@@ -226,7 +229,10 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Logout Successful&quot;
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Logout Successful&quot;,
+    &quot;data&quot;: null,
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
     </span>
@@ -336,7 +342,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"family_name\": \"Doe\",
     \"email\": \"john@example.com\",
     \"password\": \"password123\",
-    \"password_confirmation\": \"password123\"
+    \"password_confirmation\": \"password123\",
+    \"device_name\": \"iPhone 15\"
 }"
 </code></pre></div>
 
@@ -356,7 +363,8 @@ let body = {
     "family_name": "Doe",
     "email": "john@example.com",
     "password": "password123",
-    "password_confirmation": "password123"
+    "password_confirmation": "password123",
+    "device_name": "iPhone 15"
 };
 
 fetch(url, {
@@ -374,14 +382,19 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;access_token&quot;: &quot;1|laravel-sanctum-token&quot;,
-    &quot;token_type&quot;: &quot;Bearer&quot;,
-    &quot;user&quot;: {
-        &quot;id&quot;: 1,
-        &quot;given_name&quot;: &quot;John&quot;,
-        &quot;family_name&quot;: &quot;Doe&quot;,
-        &quot;email&quot;: &quot;john@example.com&quot;
-    }
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Registration Successful&quot;,
+    &quot;data&quot;: {
+        &quot;access_token&quot;: &quot;1|laravel-sanctum-token&quot;,
+        &quot;token_type&quot;: &quot;Bearer&quot;,
+        &quot;user&quot;: {
+            &quot;id&quot;: 1,
+            &quot;given_name&quot;: &quot;John&quot;,
+            &quot;family_name&quot;: &quot;Doe&quot;,
+            &quot;email&quot;: &quot;john@example.com&quot;
+        }
+    },
+    &quot;response_code&quot;: 201
 }</code>
  </pre>
             <blockquote>
@@ -390,7 +403,10 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;The given data was invalid.&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;data&quot;: null,
+    &quot;response_code&quot;: 422
 }</code>
  </pre>
     </span>
@@ -526,6 +542,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Must match password. Example: <code>password123</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="device_name"                data-endpoint="POSTapi-register"
+               value="iPhone 15"
+               data-component="body">
+    <br>
+<p>nullable Optional device name for token identification. Example: <code>iPhone 15</code></p>
+        </div>
         </form>
 
                     <h2 id="authentication-POSTapi-login">Login</h2>
@@ -583,8 +611,13 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;access_token&quot;: &quot;1|laravel-sanctum-token&quot;,
-    &quot;token_type&quot;: &quot;Bearer&quot;
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Login successful.&quot;,
+    &quot;data&quot;: {
+        &quot;access_token&quot;: &quot;1|laravel-sanctum-token&quot;,
+        &quot;token_type&quot;: &quot;Bearer&quot;
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
@@ -593,7 +626,12 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Incorrect Password&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Invalid Credentials&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;Please enter a valid email and password.&quot;
+    },
+    &quot;response_code&quot;: 401
 }</code>
  </pre>
     </span>
@@ -703,7 +741,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="iPhone 15"
                data-component="body">
     <br>
-<p>Optional device name for token identification. Example: <code>iPhone 15</code></p>
+<p>nullable Optional device name for token identification. Example: <code>iPhone 15</code></p>
         </div>
         </form>
 
@@ -757,16 +795,23 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;current_page&quot;: 1,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Electronics&quot;,
-            &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Fetching All Category Data&quot;,
+    &quot;data&quot;: {
+        &quot;categories&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;data&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;Electronics&quot;,
+                    &quot;user_id&quot;: 5
+                }
+            ],
+            &quot;per_page&quot;: 10,
+            &quot;total&quot;: 50
         }
-    ],
-    &quot;per_page&quot;: 10,
-    &quot;total&quot;: 50
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
@@ -775,16 +820,23 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;current_page&quot;: 1,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Electronics&quot;,
-            &quot;user_id&quot;: 3
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Fetching Your Category Data&quot;,
+    &quot;data&quot;: {
+        &quot;categories&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;data&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;Electronics&quot;,
+                    &quot;user_id&quot;: 3
+                }
+            ],
+            &quot;per_page&quot;: 10,
+            &quot;total&quot;: 5
         }
-    ],
-    &quot;per_page&quot;: 10,
-    &quot;total&quot;: 5
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
@@ -793,7 +845,9 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthorized role&quot;,
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
     </span>
@@ -882,6 +936,189 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
+                    <h2 id="category-controller-GETapi-categories--category_id-">Get a category</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Admins can view any category. Clients can only view their own.</p>
+
+<span id="example-requests-GETapi-categories--category_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/categories/1" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/categories/1"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-categories--category_id-">
+            <blockquote>
+            <p>Example response (200, Success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Show category successful.&quot;,
+    &quot;data&quot;: {
+        &quot;category&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Electronics&quot;,
+            &quot;user_id&quot;: 5
+        }
+    },
+    &quot;response_code&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403, Forbidden (client accessing another user&#039;s category)):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;This Category does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-categories--category_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-categories--category_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-categories--category_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-categories--category_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-categories--category_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-categories--category_id-" data-method="GET"
+      data-path="api/categories/{category_id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-categories--category_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-categories--category_id-"
+                    onclick="tryItOut('GETapi-categories--category_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-categories--category_id-"
+                    onclick="cancelTryOut('GETapi-categories--category_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-categories--category_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/categories/{category_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-categories--category_id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-categories--category_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-categories--category_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="category_id"                data-endpoint="GETapi-categories--category_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the category. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="category"                data-endpoint="GETapi-categories--category_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the category. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="category-controller-POSTapi-categories">Create a category</h2>
 
 <p>
@@ -933,32 +1170,44 @@ fetch(url, {
 
 <span id="example-responses-POSTapi-categories">
             <blockquote>
-            <p>Example response (201, Success):</p>
+            <p>Example response (200, Admin success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;name&quot;: &quot;Electronics&quot;,
-    &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Category created successfully.&quot;,
+    &quot;data&quot;: {
+        &quot;category&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Electronics&quot;,
+            &quot;user_id&quot;: 5
+        }
+    },
+    &quot;response_code&quot;: 201
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Unauthorized role):</p>
+            <p>Example response (200, Client success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Category created successfully.&quot;,
+    &quot;data&quot;: {
+        &quot;category&quot;: &quot;Electronics&quot;
+    },
+    &quot;response_code&quot;: 201
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (422, Validation error):</p>
+            <p>Example response (422, Validation errors):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;The name field is required.&quot;
+    &quot;message&quot;: &quot;The given data was invalid.&quot;
 }</code>
  </pre>
     </span>
@@ -1068,217 +1317,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="5"
                data-component="body">
     <br>
-<p>The ID of the user to assign the category to (admin only). Example: <code>5</code></p>
+<p>optional The ID of the user to assign the category to (admin only). Example: <code>5</code></p>
         </div>
         </form>
 
-                    <h2 id="category-controller-GETapi-categories--id-">Get a category</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-<p>Admins can view any category. Clients can only view their own.</p>
-
-<span id="example-requests-GETapi-categories--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/categories/1" \
-    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/categories/1"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_AUTH_KEY}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-categories--id-">
-            <blockquote>
-            <p>Example response (200, Success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;name&quot;: &quot;Electronics&quot;,
-    &quot;user_id&quot;: 5
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (403, Client accessing another user&#039;s category):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (403, Unauthorized role):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-categories--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-categories--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-categories--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-categories--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-categories--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-categories--id-" data-method="GET"
-      data-path="api/categories/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-categories--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-categories--id-"
-                    onclick="tryItOut('GETapi-categories--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-categories--id-"
-                    onclick="cancelTryOut('GETapi-categories--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-categories--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/categories/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-categories--id-"
-               value="Bearer {YOUR_AUTH_KEY}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-categories--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-categories--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-categories--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the category. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>category</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="category"                data-endpoint="GETapi-categories--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the category. Example: <code>1</code></p>
-            </div>
-                    </form>
-
-    <h3>Response</h3>
-    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
-    <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-<br>
-<p>The category ID.</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-<br>
-<p>The category name.</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-<br>
-<p>The ID of the owning user.</p>
-        </div>
-                        <h2 id="category-controller-PUTapi-categories--id-">Update a category</h2>
+                    <h2 id="category-controller-PATCHapi-categories--category_id-">Update a category</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1286,12 +1329,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <p>Admins can update any category. Clients can only update their own.</p>
 
-<span id="example-requests-PUTapi-categories--id-">
+<span id="example-requests-PATCHapi-categories--category_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
-    <pre><code class="language-bash">curl --request PUT \
+    <pre><code class="language-bash">curl --request PATCH \
     "http://127.0.0.1:8000/api/categories/1" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
@@ -1318,93 +1361,92 @@ let body = {
 };
 
 fetch(url, {
-    method: "PUT",
+    method: "PATCH",
     headers,
     body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
 
-<span id="example-responses-PUTapi-categories--id-">
+<span id="example-responses-PATCHapi-categories--category_id-">
             <blockquote>
             <p>Example response (200, Success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;name&quot;: &quot;Apparel&quot;,
-    &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Update category successful.&quot;,
+    &quot;data&quot;: {
+        &quot;category&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Apparel&quot;,
+            &quot;user_id&quot;: 5
+        }
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Client updating another user&#039;s category):</p>
+            <p>Example response (403, Forbidden):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (422, Validation error):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;The name field is required.&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;This Category does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
     </span>
-<span id="execution-results-PUTapi-categories--id-" hidden>
+<span id="execution-results-PATCHapi-categories--category_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-categories--id-"></span>:
+                id="execution-response-status-PATCHapi-categories--category_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-categories--id-"
+    <pre class="json"><code id="execution-response-content-PATCHapi-categories--category_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-categories--id-" hidden>
+<span id="execution-error-PATCHapi-categories--category_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-categories--id-">
+    <pre><code id="execution-error-message-PATCHapi-categories--category_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-categories--id-" data-method="PUT"
-      data-path="api/categories/{id}"
+<form id="form-PATCHapi-categories--category_id-" data-method="PATCH"
+      data-path="api/categories/{category_id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-categories--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-categories--category_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-categories--id-"
-                    onclick="tryItOut('PUTapi-categories--id-');">Try it out ⚡
+                    id="btn-tryout-PATCHapi-categories--category_id-"
+                    onclick="tryItOut('PATCHapi-categories--category_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-categories--id-"
-                    onclick="cancelTryOut('PUTapi-categories--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PATCHapi-categories--category_id-"
+                    onclick="cancelTryOut('PATCHapi-categories--category_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-categories--id-"
+                    id="btn-executetryout-PATCHapi-categories--category_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
             </button>
             </h3>
             <p>
-            <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/categories/{id}</code></b>
-        </p>
-            <p>
             <small class="badge badge-purple">PATCH</small>
-            <b><code>api/categories/{id}</code></b>
+            <b><code>api/categories/{category_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1413,7 +1455,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-categories--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="PATCHapi-categories--category_id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -1425,7 +1467,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-categories--id-"
+                              name="Content-Type"                data-endpoint="PATCHapi-categories--category_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -1437,7 +1479,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-categories--id-"
+                              name="Accept"                data-endpoint="PATCHapi-categories--category_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -1445,12 +1487,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="PUTapi-categories--id-"
+               step="any"               name="category_id"                data-endpoint="PATCHapi-categories--category_id-"
                value="1"
                data-component="url">
     <br>
@@ -1462,7 +1504,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="category"                data-endpoint="PUTapi-categories--id-"
+               step="any"               name="category"                data-endpoint="PATCHapi-categories--category_id-"
                value="1"
                data-component="url">
     <br>
@@ -1475,7 +1517,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="name"                data-endpoint="PUTapi-categories--id-"
+                              name="name"                data-endpoint="PATCHapi-categories--category_id-"
                value="Apparel"
                data-component="body">
     <br>
@@ -1483,7 +1525,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="category-controller-DELETEapi-categories--id-">Delete a category</h2>
+                    <h2 id="category-controller-DELETEapi-categories--category_id-">Delete a category</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1491,7 +1533,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <p>Admins can delete any category. Clients can only delete their own.</p>
 
-<span id="example-requests-DELETEapi-categories--id-">
+<span id="example-requests-DELETEapi-categories--category_id-">
 <blockquote>Example request:</blockquote>
 
 
@@ -1522,7 +1564,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-categories--id-">
+<span id="example-responses-DELETEapi-categories--category_id-">
             <blockquote>
             <p>Example response (200, Success):</p>
         </blockquote>
@@ -1533,52 +1575,57 @@ fetch(url, {
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Client deleting another user&#039;s category):</p>
+            <p>Example response (403, Forbidden):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;This Category does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
     </span>
-<span id="execution-results-DELETEapi-categories--id-" hidden>
+<span id="execution-results-DELETEapi-categories--category_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-categories--id-"></span>:
+                id="execution-response-status-DELETEapi-categories--category_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-categories--id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-categories--category_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-categories--id-" hidden>
+<span id="execution-error-DELETEapi-categories--category_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-categories--id-">
+    <pre><code id="execution-error-message-DELETEapi-categories--category_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-categories--id-" data-method="DELETE"
-      data-path="api/categories/{id}"
+<form id="form-DELETEapi-categories--category_id-" data-method="DELETE"
+      data-path="api/categories/{category_id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-categories--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-categories--category_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-categories--id-"
-                    onclick="tryItOut('DELETEapi-categories--id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-categories--category_id-"
+                    onclick="tryItOut('DELETEapi-categories--category_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-categories--id-"
-                    onclick="cancelTryOut('DELETEapi-categories--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-categories--category_id-"
+                    onclick="cancelTryOut('DELETEapi-categories--category_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-categories--id-"
+                    id="btn-executetryout-DELETEapi-categories--category_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -1586,7 +1633,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/categories/{id}</code></b>
+            <b><code>api/categories/{category_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1595,7 +1642,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-categories--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-categories--category_id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -1607,7 +1654,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-categories--id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-categories--category_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -1619,7 +1666,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-categories--id-"
+                              name="Accept"                data-endpoint="DELETEapi-categories--category_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -1627,12 +1674,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="DELETEapi-categories--id-"
+               step="any"               name="category_id"                data-endpoint="DELETEapi-categories--category_id-"
                value="1"
                data-component="url">
     <br>
@@ -1644,7 +1691,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="category"                data-endpoint="DELETEapi-categories--id-"
+               step="any"               name="category"                data-endpoint="DELETEapi-categories--category_id-"
                value="1"
                data-component="url">
     <br>
@@ -1656,7 +1703,151 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     
 
-                                <h2 id="endpoints-GETapi-health">GET api/health</h2>
+                                <h2 id="endpoints-GETapi-debug-auth">GET api/debug-auth</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-debug-auth">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/debug-auth" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/debug-auth"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-debug-auth">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;bearer_token&quot;: &quot;1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d&quot;,
+    &quot;header&quot;: &quot;Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d&quot;,
+    &quot;user&quot;: null
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-debug-auth" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-debug-auth"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-debug-auth"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-debug-auth" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-debug-auth">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-debug-auth" data-method="GET"
+      data-path="api/debug-auth"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-debug-auth', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-debug-auth"
+                    onclick="tryItOut('GETapi-debug-auth');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-debug-auth"
+                    onclick="cancelTryOut('GETapi-debug-auth');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-debug-auth"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/debug-auth</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-debug-auth"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-debug-auth"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-debug-auth"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-GETapi-health">GET api/health</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1839,7 +2030,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-test">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -1851,7 +2042,13 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;id&quot;: 2,
+    &quot;given_name&quot;: &quot;Client&quot;,
+    &quot;family_name&quot;: &quot;User&quot;,
+    &quot;email&quot;: &quot;client@example.com&quot;,
+    &quot;email_verified_at&quot;: null,
+    &quot;created_at&quot;: &quot;2026-06-04T01:25:40.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2026-06-04T01:25:40.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -1981,7 +2178,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-user">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -1993,7 +2190,13 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;id&quot;: 2,
+    &quot;given_name&quot;: &quot;Client&quot;,
+    &quot;family_name&quot;: &quot;User&quot;,
+    &quot;email&quot;: &quot;client@example.com&quot;,
+    &quot;email_verified_at&quot;: null,
+    &quot;created_at&quot;: &quot;2026-06-04T01:25:40.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2026-06-04T01:25:40.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -2123,7 +2326,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-users">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (403):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -2135,7 +2338,12 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthorized.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;You do not have the right permission for this action.&quot;
+    },
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
     </span>
@@ -2274,18 +2482,25 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;current_page&quot;: 1,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;amount&quot;: 15.5,
-            &quot;description&quot;: &quot;Lunch&quot;,
-            &quot;category_id&quot;: 1,
-            &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Fetch expense list successful.&quot;,
+    &quot;data&quot;: {
+        &quot;expenses&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;data&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;amount&quot;: 15.5,
+                    &quot;description&quot;: &quot;Lunch&quot;,
+                    &quot;category_id&quot;: 1,
+                    &quot;user_id&quot;: 5
+                }
+            ],
+            &quot;per_page&quot;: 10,
+            &quot;total&quot;: 50
         }
-    ],
-    &quot;per_page&quot;: 10,
-    &quot;total&quot;: 50
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
@@ -2294,27 +2509,25 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;current_page&quot;: 1,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;amount&quot;: 15.5,
-            &quot;description&quot;: &quot;Lunch&quot;,
-            &quot;category_id&quot;: 1,
-            &quot;user_id&quot;: 3
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Fetch expense list successful.&quot;,
+    &quot;data&quot;: {
+        &quot;expenses&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;data&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;amount&quot;: 15.5,
+                    &quot;description&quot;: &quot;Lunch&quot;,
+                    &quot;category_id&quot;: 1,
+                    &quot;user_id&quot;: 3
+                }
+            ],
+            &quot;per_page&quot;: 10,
+            &quot;total&quot;: 5
         }
-    ],
-    &quot;per_page&quot;: 10,
-    &quot;total&quot;: 5
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (403, Unauthorized role):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
     </span>
@@ -2403,6 +2616,189 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
+                    <h2 id="expense-controller-GETapi-expenses--expense_id-">Get an expense</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Clients can only view their own expenses.</p>
+
+<span id="example-requests-GETapi-expenses--expense_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/expenses/1" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/expenses/1"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-expenses--expense_id-">
+            <blockquote>
+            <p>Example response (200, Success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Show expense successful.&quot;,
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;amount&quot;: 15.5,
+        &quot;description&quot;: &quot;Lunch&quot;,
+        &quot;category_id&quot;: 1,
+        &quot;user_id&quot;: 5
+    },
+    &quot;response_code&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403, Forbidden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;This Expense does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-expenses--expense_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-expenses--expense_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-expenses--expense_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-expenses--expense_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-expenses--expense_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-expenses--expense_id-" data-method="GET"
+      data-path="api/expenses/{expense_id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-expenses--expense_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-expenses--expense_id-"
+                    onclick="tryItOut('GETapi-expenses--expense_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-expenses--expense_id-"
+                    onclick="cancelTryOut('GETapi-expenses--expense_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-expenses--expense_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/expenses/{expense_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-expenses--expense_id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-expenses--expense_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-expenses--expense_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>expense_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="expense_id"                data-endpoint="GETapi-expenses--expense_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>expense</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="expense"                data-endpoint="GETapi-expenses--expense_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="expense-controller-POSTapi-expenses">Create an expense</h2>
 
 <p>
@@ -2459,34 +2855,33 @@ fetch(url, {
 
 <span id="example-responses-POSTapi-expenses">
             <blockquote>
-            <p>Example response (201, Success):</p>
+            <p>Example response (200, Client success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;amount&quot;: 15.5,
-    &quot;description&quot;: &quot;Lunch&quot;,
-    &quot;category_id&quot;: 1,
-    &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Expense created successfully.&quot;,
+    &quot;data&quot;: {
+        &quot;amount&quot;: 15.5,
+        &quot;description&quot;: &quot;Lunch&quot;,
+        &quot;category_id&quot;: 1
+    },
+    &quot;response_code&quot;: 201
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Unauthorized role):</p>
+            <p>Example response (422, Invalid category):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (422, Validation error):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;The given data was invalid.&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Invalid category&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;That category does not exist.&quot;
+    },
+    &quot;response_code&quot;: 422
 }</code>
  </pre>
     </span>
@@ -2589,14 +2984,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
- &nbsp;
+<i>optional</i> &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-expenses"
                value="Lunch"
                data-component="body">
     <br>
-<p>Description of the expense. Example: <code>Lunch</code></p>
+<p>nullable Description of the expense. Example: <code>Lunch</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
@@ -2608,7 +3003,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="1"
                data-component="body">
     <br>
-<p>The ID of the category. Example: <code>1</code></p>
+<p>nullable The ID of the category. Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
@@ -2620,194 +3015,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="5"
                data-component="body">
     <br>
-<p>The ID of the user to assign the expense to (admin only). Example: <code>5</code></p>
+<p>optional The ID of the user to assign the expense to (admin only). Example: <code>5</code></p>
         </div>
         </form>
 
-                    <h2 id="expense-controller-GETapi-expenses--id-">Get an expense</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-<p>Admins can view any expense.
-Clients can only view their own.</p>
-
-<span id="example-requests-GETapi-expenses--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/expenses/1" \
-    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/expenses/1"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_AUTH_KEY}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-expenses--id-">
-            <blockquote>
-            <p>Example response (200, Success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;amount&quot;: 15.5,
-    &quot;description&quot;: &quot;Lunch&quot;,
-    &quot;category_id&quot;: 1,
-    &quot;user_id&quot;: 5
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (403, Client accessing another user&#039;s expense):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (403, Unauthorized role):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthorized role&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-expenses--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-expenses--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-expenses--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-expenses--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-expenses--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-expenses--id-" data-method="GET"
-      data-path="api/expenses/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-expenses--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-expenses--id-"
-                    onclick="tryItOut('GETapi-expenses--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-expenses--id-"
-                    onclick="cancelTryOut('GETapi-expenses--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-expenses--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/expenses/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-expenses--id-"
-               value="Bearer {YOUR_AUTH_KEY}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-expenses--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-expenses--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-expenses--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the expense. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>expense</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="expense"                data-endpoint="GETapi-expenses--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the expense. Example: <code>1</code></p>
-            </div>
-                    </form>
-
-                    <h2 id="expense-controller-PUTapi-expenses--id-">Update an expense</h2>
+                    <h2 id="expense-controller-PATCHapi-expenses--expense_id-">Update an expense</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2816,12 +3028,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Admins can update any expense.
 Clients can only update their own.</p>
 
-<span id="example-requests-PUTapi-expenses--id-">
+<span id="example-requests-PATCHapi-expenses--expense_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
-    <pre><code class="language-bash">curl --request PUT \
+    <pre><code class="language-bash">curl --request PATCH \
     "http://127.0.0.1:8000/api/expenses/1" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
@@ -2852,95 +3064,106 @@ let body = {
 };
 
 fetch(url, {
-    method: "PUT",
+    method: "PATCH",
     headers,
     body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
 
-<span id="example-responses-PUTapi-expenses--id-">
+<span id="example-responses-PATCHapi-expenses--expense_id-">
             <blockquote>
             <p>Example response (200, Success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;amount&quot;: 25.75,
-    &quot;description&quot;: &quot;Dinner&quot;,
-    &quot;category_id&quot;: 2,
-    &quot;user_id&quot;: 5
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Update expense successful.&quot;,
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;amount&quot;: 25.75,
+        &quot;description&quot;: &quot;Dinner&quot;,
+        &quot;category_id&quot;: 2,
+        &quot;user_id&quot;: 5
+    },
+    &quot;response_code&quot;: 200
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Client updating another user&#039;s expense):</p>
+            <p>Example response (403, Forbidden):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;This Expense does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (422, Validation error):</p>
+            <p>Example response (422, Invalid category):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;The given data was invalid.&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Invalid category&quot;,
+    &quot;errors&quot;: {
+        &quot;detail&quot;: &quot;That category does not exist.&quot;
+    },
+    &quot;response_code&quot;: 422
 }</code>
  </pre>
     </span>
-<span id="execution-results-PUTapi-expenses--id-" hidden>
+<span id="execution-results-PATCHapi-expenses--expense_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-expenses--id-"></span>:
+                id="execution-response-status-PATCHapi-expenses--expense_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-expenses--id-"
+    <pre class="json"><code id="execution-response-content-PATCHapi-expenses--expense_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-expenses--id-" hidden>
+<span id="execution-error-PATCHapi-expenses--expense_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-expenses--id-">
+    <pre><code id="execution-error-message-PATCHapi-expenses--expense_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-expenses--id-" data-method="PUT"
-      data-path="api/expenses/{id}"
+<form id="form-PATCHapi-expenses--expense_id-" data-method="PATCH"
+      data-path="api/expenses/{expense_id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-expenses--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-expenses--expense_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-expenses--id-"
-                    onclick="tryItOut('PUTapi-expenses--id-');">Try it out ⚡
+                    id="btn-tryout-PATCHapi-expenses--expense_id-"
+                    onclick="tryItOut('PATCHapi-expenses--expense_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-expenses--id-"
-                    onclick="cancelTryOut('PUTapi-expenses--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PATCHapi-expenses--expense_id-"
+                    onclick="cancelTryOut('PATCHapi-expenses--expense_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-expenses--id-"
+                    id="btn-executetryout-PATCHapi-expenses--expense_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
             </button>
             </h3>
             <p>
-            <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/expenses/{id}</code></b>
-        </p>
-            <p>
             <small class="badge badge-purple">PATCH</small>
-            <b><code>api/expenses/{id}</code></b>
+            <b><code>api/expenses/{expense_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -2949,7 +3172,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-expenses--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="PATCHapi-expenses--expense_id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -2961,7 +3184,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-expenses--id-"
+                              name="Content-Type"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -2973,7 +3196,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-expenses--id-"
+                              name="Accept"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -2981,12 +3204,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>expense_id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="PUTapi-expenses--id-"
+               step="any"               name="expense_id"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="1"
                data-component="url">
     <br>
@@ -2998,7 +3221,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="expense"                data-endpoint="PUTapi-expenses--id-"
+               step="any"               name="expense"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="1"
                data-component="url">
     <br>
@@ -3011,11 +3234,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="amount"                data-endpoint="PUTapi-expenses--id-"
+               step="any"               name="amount"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="25.75"
                data-component="body">
     <br>
-<p>The updated expense amount. Example: <code>25.75</code></p>
+<p>nullable Updated amount. Example: <code>25.75</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -3023,11 +3246,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="description"                data-endpoint="PUTapi-expenses--id-"
+                              name="description"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="Dinner"
                data-component="body">
     <br>
-<p>The updated description. Example: <code>Dinner</code></p>
+<p>nullable Updated description. Example: <code>Dinner</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
@@ -3035,15 +3258,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="category_id"                data-endpoint="PUTapi-expenses--id-"
+               step="any"               name="category_id"                data-endpoint="PATCHapi-expenses--expense_id-"
                value="2"
                data-component="body">
     <br>
-<p>The updated category ID. Example: <code>2</code></p>
+<p>nullable Updated category ID. Example: <code>2</code></p>
         </div>
         </form>
 
-                    <h2 id="expense-controller-DELETEapi-expenses--id-">Delete an expense</h2>
+                    <h2 id="expense-controller-DELETEapi-expenses--expense_id-">Delete an expense</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3052,7 +3275,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Admins can delete any expense.
 Clients can only delete their own.</p>
 
-<span id="example-requests-DELETEapi-expenses--id-">
+<span id="example-requests-DELETEapi-expenses--expense_id-">
 <blockquote>Example request:</blockquote>
 
 
@@ -3083,7 +3306,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-expenses--id-">
+<span id="example-responses-DELETEapi-expenses--expense_id-">
             <blockquote>
             <p>Example response (200, Success):</p>
         </blockquote>
@@ -3094,52 +3317,57 @@ fetch(url, {
 }</code>
  </pre>
             <blockquote>
-            <p>Example response (403, Client deleting another user&#039;s expense):</p>
+            <p>Example response (403, Forbidden):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Forbidden&quot;
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Forbidden.&quot;,
+    &quot;errorss&quot;: {
+        &quot;detail&quot;: &quot;This Expense does not belong to you&quot;
+    },
+    &quot;response_code&quot;: 403
 }</code>
  </pre>
     </span>
-<span id="execution-results-DELETEapi-expenses--id-" hidden>
+<span id="execution-results-DELETEapi-expenses--expense_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-expenses--id-"></span>:
+                id="execution-response-status-DELETEapi-expenses--expense_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-expenses--id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-expenses--expense_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-expenses--id-" hidden>
+<span id="execution-error-DELETEapi-expenses--expense_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-expenses--id-">
+    <pre><code id="execution-error-message-DELETEapi-expenses--expense_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-expenses--id-" data-method="DELETE"
-      data-path="api/expenses/{id}"
+<form id="form-DELETEapi-expenses--expense_id-" data-method="DELETE"
+      data-path="api/expenses/{expense_id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-expenses--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-expenses--expense_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-expenses--id-"
-                    onclick="tryItOut('DELETEapi-expenses--id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-expenses--expense_id-"
+                    onclick="tryItOut('DELETEapi-expenses--expense_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-expenses--id-"
-                    onclick="cancelTryOut('DELETEapi-expenses--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-expenses--expense_id-"
+                    onclick="cancelTryOut('DELETEapi-expenses--expense_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-expenses--id-"
+                    id="btn-executetryout-DELETEapi-expenses--expense_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3147,7 +3375,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/expenses/{id}</code></b>
+            <b><code>api/expenses/{expense_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3156,7 +3384,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-expenses--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-expenses--expense_id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -3168,7 +3396,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-expenses--id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-expenses--expense_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3180,7 +3408,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-expenses--id-"
+                              name="Accept"                data-endpoint="DELETEapi-expenses--expense_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3188,12 +3416,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>expense_id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="DELETEapi-expenses--id-"
+               step="any"               name="expense_id"                data-endpoint="DELETEapi-expenses--expense_id-"
                value="1"
                data-component="url">
     <br>
@@ -3205,7 +3433,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="expense"                data-endpoint="DELETEapi-expenses--id-"
+               step="any"               name="expense"                data-endpoint="DELETEapi-expenses--expense_id-"
                value="1"
                data-component="url">
     <br>

@@ -7,6 +7,50 @@ endpoints:
     custom: []
     httpMethods:
       - GET
+    uri: api/debug-auth
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"bearer_token":"1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d","header":"Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d","user":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
     uri: api/health
     metadata:
       custom: []
@@ -43,7 +87,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
     controller: null
     method: null
     route: null
@@ -76,8 +120,8 @@ endpoints:
     responses:
       -
         custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 200
+        content: '{"id":2,"given_name":"Client","family_name":"User","email":"client@example.com","email_verified_at":null,"created_at":"2026-06-04T01:25:40.000000Z","updated_at":"2026-06-04T01:25:40.000000Z"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -87,7 +131,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
     controller: null
     method: null
     route: null
@@ -120,8 +164,8 @@ endpoints:
     responses:
       -
         custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 200
+        content: '{"id":2,"given_name":"Client","family_name":"User","email":"client@example.com","email_verified_at":null,"created_at":"2026-06-04T01:25:40.000000Z","updated_at":"2026-06-04T01:25:40.000000Z"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -131,7 +175,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
     controller: null
     method: null
     route: null
@@ -164,8 +208,8 @@ endpoints:
     responses:
       -
         custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 403
+        content: '{"success":false,"message":"Unauthorized.","errors":{"detail":"You do not have the right permission for this action."},"response_code":403}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -175,7 +219,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
     controller: null
     method: null
     route: null

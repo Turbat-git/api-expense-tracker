@@ -1,19 +1,19 @@
-name: 'Category Controller'
-description: 'APIs for Category'
+name: Authentication
+description: 'APIs for Authentication'
 endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/categories
+      - POST
+    uri: api/logout
     metadata:
       custom: []
-      groupName: 'Category Controller'
-      groupDescription: 'APIs for Category'
+      groupName: Authentication
+      groupDescription: 'APIs for Authentication'
       subgroup: ''
       subgroupDescription: ''
-      title: 'List categories'
-      description: 'Admins receive all categories paginated. Clients only receive their own.'
+      title: Logout
+      description: 'Revoke the current access token.'
       authenticated: true
       deprecated: false
     headers:
@@ -33,36 +33,18 @@ endpoints:
         status: 200
         content: |-
           {
-            "current_page": 1,
-            "data": [{"id": 1, "name": "Electronics", "user_id": 5}],
-            "per_page": 10,
-            "total": 50
+            "success": true,
+            "message": "Logout Successful",
+            "data": null,
+            "response_code": 200
           }
         headers: []
-        description: 'Admin: all categories'
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-            "current_page": 1,
-            "data": [{"id": 1, "name": "Electronics", "user_id": 3}],
-            "per_page": 10,
-            "total": 5
-          }
-        headers: []
-        description: 'Client: own categories'
-      -
-        custom: []
-        status: 403
-        content: '{"message": "Unauthorized role"}'
-        headers: []
-        description: 'Unauthorized role'
+        description: ''
     responseFields: []
     auth:
       - headers
       - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+      - 'Bearer 1|q7YOMhHX4wV661VSDUe0wn9LVSpfhdrNnfa6u1a342e3393d'
     controller: null
     method: null
     route: null
@@ -70,19 +52,18 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/categories
+    uri: api/register
     metadata:
       custom: []
-      groupName: 'Category Controller'
-      groupDescription: 'APIs for Category'
+      groupName: Authentication
+      groupDescription: 'APIs for Authentication'
       subgroup: ''
       subgroupDescription: ''
-      title: 'Create a category'
-      description: 'Admins can assign a category to any user. Clients create categories for themselves only.'
-      authenticated: true
+      title: Register
+      description: 'Create a new user account and return an access token.'
+      authenticated: false
       deprecated: false
     headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -90,327 +71,212 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
+      given_name:
         custom: []
-        name: name
-        description: 'The name of the category.'
+        name: given_name
+        description: 'First name.'
         required: true
-        example: Electronics
+        example: John
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      user_id:
+      family_name:
         custom: []
-        name: user_id
-        description: 'The ID of the user to assign the category to (admin only).'
+        name: family_name
+        description: 'Last name.'
+        required: true
+        example: Doe
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'User email address.'
+        required: true
+        example: john@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'Password (min 8 chars).'
+        required: true
+        example: password123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'Must match password.'
+        required: true
+        example: password123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'nullable Optional device name for token identification.'
         required: false
-        example: 5
-        type: integer
+        example: 'iPhone 15'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: Electronics
-      user_id: 5
+      given_name: John
+      family_name: Doe
+      email: john@example.com
+      password: password123
+      password_confirmation: password123
+      device_name: 'iPhone 15'
     fileParameters: []
     responses:
       -
         custom: []
         status: 201
-        content: '{"id": 1, "name": "Electronics", "user_id": 5}'
+        content: |-
+          {
+            "success": true,
+            "message": "Registration Successful",
+            "data": {
+              "access_token": "1|laravel-sanctum-token",
+              "token_type": "Bearer",
+              "user": {
+                "id": 1,
+                "given_name": "John",
+                "family_name": "Doe",
+                "email": "john@example.com"
+              }
+            },
+            "response_code": 201
+          }
         headers: []
-        description: Success
-      -
-        custom: []
-        status: 403
-        content: '{"message": "Unauthorized role"}'
-        headers: []
-        description: 'Unauthorized role'
+        description: ''
       -
         custom: []
         status: 422
-        content: '{"message": "The name field is required."}'
+        content: |-
+          {
+            "success": false,
+            "message": "The given data was invalid.",
+            "data": null,
+            "response_code": 422
+          }
         headers: []
-        description: 'Validation error'
+        description: ''
     responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+    auth: []
     controller: null
     method: null
     route: null
   -
     custom: []
     httpMethods:
-      - GET
-    uri: 'api/categories/{id}'
+      - POST
+    uri: api/login
     metadata:
       custom: []
-      groupName: 'Category Controller'
-      groupDescription: 'APIs for Category'
+      groupName: Authentication
+      groupDescription: 'APIs for Authentication'
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get a category'
-      description: 'Admins can view any category. Clients can only view their own.'
-      authenticated: true
+      title: Login
+      description: 'Authenticate a user and return an access token.'
+      authenticated: false
       deprecated: false
     headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the category.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      category:
-        custom: []
-        name: category
-        description: 'The ID of the category.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: 1
-      category: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"id": 1, "name": "Electronics", "user_id": 5}'
-        headers: []
-        description: Success
-      -
-        custom: []
-        status: 403
-        content: '{"message": "Forbidden"}'
-        headers: []
-        description: "Client accessing another user's category"
-      -
-        custom: []
-        status: 403
-        content: '{"message": "Unauthorized role"}'
-        headers: []
-        description: 'Unauthorized role'
-    responseFields:
-      id:
-        custom: []
-        name: id
-        description: 'The category ID.'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      name:
-        custom: []
-        name: name
-        description: 'The category name.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      user_id:
-        custom: []
-        name: user_id
-        description: 'The ID of the owning user.'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PUT
-      - PATCH
-    uri: 'api/categories/{id}'
-    metadata:
-      custom: []
-      groupName: 'Category Controller'
-      groupDescription: 'APIs for Category'
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Update a category'
-      description: 'Admins can update any category. Clients can only update their own.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the category.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      category:
-        custom: []
-        name: category
-        description: 'The ID of the category.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: 1
-      category: 1
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
+      email:
         custom: []
-        name: name
-        description: 'The new name of the category.'
+        name: email
+        description: 'User email address.'
         required: true
-        example: Apparel
+        example: john@example.com
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-    cleanBodyParameters:
-      name: Apparel
-    fileParameters: []
-    responses:
-      -
+      password:
         custom: []
-        status: 200
-        content: '{"id": 1, "name": "Apparel", "user_id": 5}'
-        headers: []
-        description: Success
-      -
-        custom: []
-        status: 403
-        content: '{"message": "Forbidden"}'
-        headers: []
-        description: "Client updating another user's category"
-      -
-        custom: []
-        status: 422
-        content: '{"message": "The name field is required."}'
-        headers: []
-        description: 'Validation error'
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/categories/{id}'
-    metadata:
-      custom: []
-      groupName: 'Category Controller'
-      groupDescription: 'APIs for Category'
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Delete a category'
-      description: 'Admins can delete any category. Clients can only delete their own.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the category.'
+        name: password
+        description: 'User password.'
         required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      category:
-        custom: []
-        name: category
-        description: 'The ID of the category.'
-        required: true
-        example: 1
-        type: integer
+        example: password123
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-    cleanUrlParameters:
-      id: 1
-      category: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      device_name:
+        custom: []
+        name: device_name
+        description: 'nullable Optional device name for token identification.'
+        required: false
+        example: 'iPhone 15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      email: john@example.com
+      password: password123
+      device_name: 'iPhone 15'
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"message": "Deleted"}'
+        content: |-
+          {
+            "success": true,
+            "message": "Login successful.",
+            "data": {
+              "access_token": "1|laravel-sanctum-token",
+              "token_type": "Bearer"
+            },
+            "response_code": 200
+          }
         headers: []
-        description: Success
+        description: ''
       -
         custom: []
-        status: 403
-        content: '{"message": "Forbidden"}'
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Invalid Credentials",
+            "errors": {
+              "detail": "Please enter a valid email and password."
+            },
+            "response_code": 401
+          }
         headers: []
-        description: "Client deleting another user's category"
+        description: ''
     responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6|UOWVVXQPGZsflkjNkRhexbqvoKxcrPd7ckfUUxfH117a7c24'
+    auth: []
     controller: null
     method: null
     route: null
