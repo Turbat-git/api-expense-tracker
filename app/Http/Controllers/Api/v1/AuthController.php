@@ -42,6 +42,7 @@ class AuthController extends Controller
      * }
      *
      * Reference for API Practice; https://restfulapi.net/rest-api-best-practices/
+     * https://laravel.com/docs/13.x/responses
      */
     public function login(Request $request)
     {

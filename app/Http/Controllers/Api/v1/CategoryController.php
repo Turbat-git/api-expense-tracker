@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Knuckles\Scribe\Attributes\Group;
 
 #[Group("Category Controller", "APIs for Category")]
@@ -110,6 +111,8 @@ class CategoryController extends Controller
      * @response 422 scenario="Validation errors" {
      *   "message": "The given data was invalid."
      * }
+     *
+     * Reference: https://laravel.com/docs/13.x/validation#rule-unique
      */
     public function store(Request $request)
     {
@@ -118,7 +121,14 @@ class CategoryController extends Controller
         if ($user->hasRole('admin')) {
             $validated = $request->validate(
                 [
-                'name' => 'required|string|max:64',
+                    'name' => [
+                        'required',
+                        'string',
+                        'max:64',
+                        Rule::unique('categories')->where(fn ($q) =>
+                        $q->where('user_id', $request->user()->id)
+                        ),
+                    ],
                 'user_id' => 'required|exists:users,id'
                 ]
             );
@@ -141,7 +151,14 @@ class CategoryController extends Controller
         }
         elseif ($user->hasRole('client')) {
             $validated = $request->validate([
-                'name' => 'required|string|max:64',
+                'name' => [
+                    'required',
+                    'string',
+                    'max:64',
+                    Rule::unique('categories')->where(fn ($q) =>
+                    $q->where('user_id', $request->user()->id)
+                    ),
+                ],
             ]);
 
             $category = Category::create([
@@ -277,7 +294,14 @@ class CategoryController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:64',
+            'name' => [
+                'required',
+                'string',
+                'max:64',
+                Rule::unique('categories')->where(fn ($q) =>
+                $q->where('user_id', $request->user()->id)
+                ),
+            ],
         ]);
 
         $category->update($validated);
