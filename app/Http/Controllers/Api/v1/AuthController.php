@@ -54,7 +54,7 @@ class AuthController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'message' => 'Incorrect Password',
+                    'message' => 'Invalid Credentials',
                     'data'=>null,
                     'response_code'=>401
                 ], 401);

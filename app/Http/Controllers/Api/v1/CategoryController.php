@@ -35,21 +35,26 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-
         if ($user->hasRole('admin')) {
-            return Category::paginate(10);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Fetching All Category Data',
+                    'data' => [Category::paginate(10)],
+                    'response_code' => 200
+                ], 200
+            );
         }
         elseif ($user->hasRole('client')) {
-            return Category::where('user_id', $user->id)->paginate(10);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Fetching Your Category Data',
+                    'data' => [Category::where('user_id', $user->id)->paginate(10)],
+                    'response_code' => 200
+                ], 200
+            );
         }
-
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
-
     }
 
     /**
@@ -68,10 +73,6 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-
         if ($user->hasRole('admin')) {
             $validated = $request->validate(
                 [
@@ -85,7 +86,16 @@ class CategoryController extends Controller
                 'user_id' => $validated['user_id'],
             ]);
 
-            return response()->json($category, 201);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Category created successfully.',
+                    'data' =>
+                        [
+                            'category' => $category,
+                        ],
+                    'response_code' => 201,
+                ],201);
         }
         elseif ($user->hasRole('client')) {
             $validated = $request->validate([
@@ -97,12 +107,17 @@ class CategoryController extends Controller
                 'user_id' => $request->user()->id,
             ]);
 
-            return response()->json($category, 201);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Category created successfully.',
+                    'data' =>
+                        [
+                            'category' => $category->name,
+                        ],
+                    'response_code' => 201,
+                ],201);
         }
-
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
     }
 
     /**
@@ -124,26 +139,37 @@ class CategoryController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-
         if ($user->hasRole('admin')) {
-            return response()->json($category);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Show category successful.',
+                    'data' => [
+                        'category' => $category,
+                    ],
+                    'response_code' => 200
+                ], 200);
         }
         elseif ($user->hasRole('client')) {
             if ($category->user_id !== auth()->id()) {
                 return response()->json([
-                    'message' => 'Forbidden'
+                    'success' => false,
+                    'message' => 'Forbidden. This Category does not belong to you.',
+                    'data' => null,
+                    'response_code' => 403
                 ], 403);
             }
 
-            return response()->json($category);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Show category successful.',
+                    'data' => [
+                        'category' => $category,
+                    ],
+                    'response_code' => 200
+                ], 200);
         }
-
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
     }
 
     /**
@@ -163,12 +189,14 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-
         if ($user->hasPermissionTo('update-own-categories') && $category->user_id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Forbidden. This Category does not belong to you',
+                    'data' => null,
+                    'response_code' => 403
+                ], 403);
         }
 
         $validated = $request->validate([
@@ -177,7 +205,15 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
-        return response()->json($category);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Update category successful.',
+                'data' => [
+                    'category' => $category,
+                ],
+                'response_code' => 200
+            ], 200);
     }
 
     /**
@@ -195,16 +231,18 @@ class CategoryController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-
         if ($user->hasRole('client') && $category->user_id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Forbidden. This Category does not belong to you',
+                    'data' => null,
+                    'response_code' => 403
+                ], 403);
         }
 
         $category->delete();
 
-        return response()->json(['message' => 'Deleted']);
+        return response()->json([], 204);
     }
 }
