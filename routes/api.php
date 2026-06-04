@@ -7,6 +7,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/debug-auth', function (Request $request) {
+    return [
+        'bearer_token' => $request->bearerToken(),
+        'header' => $request->header('Authorization'),
+        'user' => $request->user(),
+    ];
+});
+
 Route::get('/health', function () {
     return response()->json([
         'status' => 'ok'
