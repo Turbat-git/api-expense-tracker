@@ -1,11 +1,7 @@
 <?php
 
-use App\Models\Category;
-use App\Models\Expense;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\PersonalAccessToken;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -27,13 +23,15 @@ test('allows user to register', function () {
     $response
         ->assertStatus(201)
         ->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'user' => [
-                'id',
-                'given_name',
-                'family_name',
-                'email',
+            'data' => [
+                'access_token',
+                'token_type',
+                'user' => [
+                    'id',
+                    'given_name',
+                    'family_name',
+                    'email',
+                ],
             ],
         ]);
 
@@ -83,7 +81,7 @@ test('validates unique email when registering', function () {
 
 test('allows user to login', function () {
 
-    $user = User::factory()->create([
+    User::factory()->create([
         'email' => 'john@example.com',
         'password' => bcrypt('password123'),
     ]);
@@ -97,8 +95,10 @@ test('allows user to login', function () {
     $response
         ->assertStatus(200)
         ->assertJsonStructure([
-            'access_token',
-            'token_type',
+            'data' => [
+                'access_token',
+                'token_type',
+            ],
         ]);
 });
 
@@ -117,7 +117,7 @@ test('returns error for incorrect password', function () {
     $response
         ->assertStatus(401)
         ->assertJson([
-            'message' => 'Incorrect Password',
+            'message' => 'Invalid Credentials',
         ]);
 });
 
@@ -141,7 +141,7 @@ test('allows authenticated user to logout', function () {
 
     $response = $this->withHeader(
         'Authorization',
-        'Bearer '.$token->plainTextToken
+        'Bearer ' . $token->plainTextToken
     )->postJson('/api/logout');
 
     $response
@@ -150,7 +150,7 @@ test('allows authenticated user to logout', function () {
             'message' => 'Logout Successful',
         ]);
 
-    expect(PersonalAccessToken::count())->toBe(0);
+    expect($user->tokens()->count())->toBe(0);
 });
 
 test('prevents unauthenticated user from logging out', function () {

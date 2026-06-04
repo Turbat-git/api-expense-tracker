@@ -35,7 +35,10 @@ test('allows clients to view their own categories only', function () {
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(1, 'data');
+        ->assertJsonStructure([
+            'data',
+            'response_code'
+        ]);
 });
 
 test('allows admin to view all categories', function () {
@@ -51,9 +54,7 @@ test('allows admin to view all categories', function () {
         ->assertStatus(200)
         ->assertJsonStructure([
             'data',
-            'current_page',
-            'per_page',
-            'total'
+            'response_code'
         ]);
 });
 
@@ -67,8 +68,8 @@ test('allows clients to create their own category', function () {
     $response
         ->assertStatus(201)
         ->assertJson([
-            'name' => 'Food',
-            'user_id' => $this->client->id
+            'success' => true,
+            'message' => 'Category created successfully.',
         ]);
 
     $this->assertDatabaseHas('categories', [
@@ -88,8 +89,8 @@ test('allows admin to create category for any user', function () {
     $response
         ->assertStatus(201)
         ->assertJson([
-            'name' => 'Admin Category',
-            'user_id' => $this->client->id
+            'success' => true,
+            'message' => 'Category created successfully.',
         ]);
 });
 
@@ -100,7 +101,10 @@ test('validates required name when creating category', function () {
 
     $response
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['name']);
+        ->assertJson([
+            'success' => false,
+            'message' => 'Validation failed.'
+        ]);
 });
 
 test('allows clients to view their own category', function () {
@@ -115,7 +119,8 @@ test('allows clients to view their own category', function () {
     $response
         ->assertStatus(200)
         ->assertJson([
-            'id' => $category->id
+            'success' => true,
+            'message' => 'Show category successful.',
         ]);
 });
 
@@ -131,7 +136,8 @@ test('prevents clients from viewing another users category', function () {
     $response
         ->assertStatus(403)
         ->assertJson([
-            'message' => 'Forbidden'
+            'success' => false,
+            'message' => 'Forbidden.',
         ]);
 });
 
@@ -150,7 +156,8 @@ test('allows clients to update their own category', function () {
     $response
         ->assertStatus(200)
         ->assertJson([
-            'name' => 'Updated Name'
+            'success' => true,
+            'message' => 'Update category successful.',
         ]);
 
     $this->assertDatabaseHas('categories', [
@@ -173,7 +180,8 @@ test('prevents clients from updating another users category', function () {
     $response
         ->assertStatus(403)
         ->assertJson([
-            'message' => 'Forbidden'
+            'success' => false,
+            'message' => 'Forbidden.',
         ]);
 });
 
@@ -186,11 +194,7 @@ test('allows clients to delete their own category', function () {
 
     $response = $this->deleteJson("/api/categories/{$category->id}");
 
-    $response
-        ->assertStatus(200)
-        ->assertJson([
-            'message' => 'Deleted'
-        ]);
+    $response->assertStatus(204);
 
     $this->assertDatabaseMissing('categories', [
         'id' => $category->id

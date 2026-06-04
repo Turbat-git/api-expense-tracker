@@ -109,7 +109,7 @@ class ExpenseController extends Controller
      * @response 422 scenario="Invalid category" {
      *   "success": false,
      *   "message": "Invalid category",
-     *   "error": {
+     *   "errors": {
      *     "detail": "That category does not exist."
      *   },
      *   "response_code": 422
@@ -137,7 +137,7 @@ class ExpenseController extends Controller
                     return response()->json([
                         'success' => false,
                         'message' => 'Invalid category',
-                        'error' =>
+                        'errors' =>
                             [
                                 'detail'=> 'That category does not exist.',
                             ],
@@ -193,7 +193,7 @@ class ExpenseController extends Controller
      * @response 403 scenario="Forbidden" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errors": {
      *     "detail": "This Expense does not belong to you"
      *   },
      *   "response_code": 403
@@ -210,7 +210,7 @@ class ExpenseController extends Controller
                     [
                         'success' => false,
                         'message' => 'Forbidden.',
-                        'error' => [
+                        'errors' => [
                             'detail' => 'This Expense does not belong to you',
                         ],
                         'response_code' => 403
@@ -255,7 +255,7 @@ class ExpenseController extends Controller
      * @response 403 scenario="Forbidden" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errors": {
      *     "detail": "This Expense does not belong to you"
      *   },
      *   "response_code": 403
@@ -264,7 +264,7 @@ class ExpenseController extends Controller
      * @response 422 scenario="Invalid category" {
      *   "success": false,
      *   "message": "Invalid category",
-     *   "error": {
+     *   "errors": {
      *     "detail": "That category does not exist."
      *   },
      *   "response_code": 422
@@ -279,7 +279,7 @@ class ExpenseController extends Controller
                 [
                     'success' => false,
                     'message' => 'Forbidden.',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'This Expense does not belong to you',
                     ],
                     'response_code' => 403
@@ -302,7 +302,7 @@ class ExpenseController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid category',
-                    'error' =>
+                    'errors' =>
                         [
                             'detail'=> 'That category does not exist.',
                         ],
@@ -338,7 +338,7 @@ class ExpenseController extends Controller
      * @response 403 scenario="Forbidden" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errorss": {
      *     "detail": "This Expense does not belong to you"
      *   },
      *   "response_code": 403
@@ -353,7 +353,7 @@ class ExpenseController extends Controller
                 [
                     'success' => false,
                     'message' => 'Forbidden.',
-                    'error' => [
+                    'errorss' => [
                         'detail' => 'This Expense does not belong to you',
                     ],
                     'response_code' => 403

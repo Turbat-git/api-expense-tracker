@@ -34,8 +34,10 @@ class AuthController extends Controller
      *
      * @response 401 {
      *   "success": false,
-     *   "message": "Incorrect Password",
-     *   "data": null,
+     *   "message": "Invalid Credentials",
+     *   "errors": {
+     *     "detail": "Please enter a valid email and password."
+     *   },
      *   "response_code": 401
      * }
      */
@@ -55,7 +57,7 @@ class AuthController extends Controller
                 [
                     'success' => false,
                     'message' => 'Invalid Credentials',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'Please enter a valid email and password.',
                     ],
                     'response_code'=>401

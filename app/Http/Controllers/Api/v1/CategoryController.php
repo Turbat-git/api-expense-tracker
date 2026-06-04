@@ -105,7 +105,7 @@ class CategoryController extends Controller
      *   "response_code": 201
      * }
      *
-     * @response 422 scenario="Validation error" {
+     * @response 422 scenario="Validation errors" {
      *   "message": "The given data was invalid."
      * }
      */
@@ -183,7 +183,7 @@ class CategoryController extends Controller
      * @response 403 scenario="Forbidden (client accessing another user's category)" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errors": {
      *     "detail": "This Category does not belong to you"
      *   },
      *   "response_code": 403
@@ -209,7 +209,7 @@ class CategoryController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Forbidden.',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'This Category does not belong to you',
                     ],
                     'response_code' => 403
@@ -252,7 +252,7 @@ class CategoryController extends Controller
      * @response 403 scenario="Forbidden" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errors": {
      *     "detail": "This Category does not belong to you"
      *   },
      *   "response_code": 403
@@ -267,7 +267,7 @@ class CategoryController extends Controller
                 [
                     'success' => false,
                     'message' => 'Forbidden.',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'This Category does not belong to you',
                     ],
                     'response_code' => 403
@@ -305,7 +305,7 @@ class CategoryController extends Controller
      * @response 403 scenario="Forbidden" {
      *   "success": false,
      *   "message": "Forbidden.",
-     *   "error": {
+     *   "errors": {
      *     "detail": "This Category does not belong to you"
      *   },
      *   "response_code": 403
@@ -320,7 +320,7 @@ class CategoryController extends Controller
                 [
                     'success' => false,
                     'message' => 'Forbidden.',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'This Category does not belong to you',
                     ],
                     'response_code' => 403

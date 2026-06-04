@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed.',
-                'error' => $e->errors(),
+                'errors' => $e->errors(),
                 'response_code' => 422,
             ], 422);
         });
@@ -38,7 +38,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated.',
-                'error' => [
+                'errors' => [
                     'detail' => 'Please login to complete the request.',
                 ],
                 'response_code' => 401,
@@ -50,7 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized.',
-                    'error' => [
+                    'errors' => [
                         'detail' => 'You do not have the right permission for this action.',
                     ],
                     'response_code' => 403

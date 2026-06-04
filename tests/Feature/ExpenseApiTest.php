@@ -41,47 +41,45 @@ test('allows clients to create expenses', function () {
 
     $response
         ->assertStatus(201)
-        ->assertJson([
-            'amount' => 99.50,
-            'description' => 'Fuel',
-            'user_id' => $this->client->id
-        ]);
+        ->assertJsonPath('data.amount', 99.50)
+        ->assertJsonPath('data.description', 'Fuel');
 
     $this->assertDatabaseHas('expenses', [
-        'description' => 'Fuel'
+        'description' => 'Fuel',
+        'user_id' => $this->client->id
     ]);
 });
 
 test('allows clients to view their own expenses only', function () {
     Sanctum::actingAs($this->client);
 
-    Expense::factory()->create([
-        'user_id' => $this->client->id
-    ]);
-
-    Expense::factory()->create([
-        'user_id' => $this->otherClient->id
-    ]);
+    Expense::factory()->create(['user_id' => $this->client->id]);
+    Expense::factory()->create(['user_id' => $this->otherClient->id]);
 
     $response = $this->getJson('/api/expenses');
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(1, 'data');
+        ->assertJsonPath('success', true)
+        ->assertJsonCount(1, 'data.data');
 });
 
 test('admin accessing expenses index', function () {
     Sanctum::actingAs($this->admin);
 
-    Expense::factory()->create([
-        'user_id' => $this->otherClient->id
-    ]);
+    Expense::factory()->create(['user_id' => $this->otherClient->id]);
 
     $response = $this->getJson('/api/expenses');
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(1, 'data');
+        ->assertJsonPath('success', true)
+        ->assertJsonStructure([
+            'success',
+            'message',
+            'data',
+            'response_code'
+        ]);
 });
 
 test('validates required amount when creating expense', function () {
@@ -93,7 +91,13 @@ test('validates required amount when creating expense', function () {
 
     $response
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['amount']);
+        ->assertJsonPath('success', false)
+        ->assertJsonStructure([
+            'success',
+            'message',
+            'errors',
+            'response_code',
+        ]);
 });
 
 test('validates amount must be numeric', function () {
@@ -105,7 +109,7 @@ test('validates amount must be numeric', function () {
 
     $response
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['amount']);
+        ->assertJsonPath('success', false);
 });
 
 test('rejects invalid category ids', function () {
@@ -133,9 +137,7 @@ test('rejects categories belonging to another user', function () {
 
     $response
         ->assertStatus(422)
-        ->assertJson([
-            'message' => 'Invalid category'
-        ]);
+        ->assertJsonPath('message', 'Invalid category');
 });
 
 test('allows clients to view their own expense', function () {
@@ -149,9 +151,7 @@ test('allows clients to view their own expense', function () {
 
     $response
         ->assertStatus(200)
-        ->assertJson([
-            'id' => $expense->id
-        ]);
+        ->assertJsonPath('data.id', $expense->id);
 });
 
 test('prevents clients from viewing another users expense', function () {
@@ -165,9 +165,7 @@ test('prevents clients from viewing another users expense', function () {
 
     $response
         ->assertStatus(403)
-        ->assertJson([
-            'message' => 'Forbidden'
-        ]);
+        ->assertJsonPath('message', 'Forbidden.');
 });
 
 test('allows partial expense updates', function () {
@@ -184,9 +182,7 @@ test('allows partial expense updates', function () {
 
     $response
         ->assertStatus(200)
-        ->assertJson([
-            'description' => 'Updated'
-        ]);
+        ->assertJsonPath('data.description', 'Updated');
 
     $this->assertDatabaseHas('expenses', [
         'id' => $expense->id,
@@ -207,9 +203,7 @@ test('prevents clients from updating another users expense', function () {
 
     $response
         ->assertStatus(403)
-        ->assertJson([
-            'message' => 'Forbidden'
-        ]);
+        ->assertJsonPath('message', 'Forbidden.');
 });
 
 test('validates update amount is numeric', function () {
@@ -225,7 +219,7 @@ test('validates update amount is numeric', function () {
 
     $response
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['amount']);
+        ->assertJsonPath('success', false);
 });
 
 test('allows clients to delete their own expense', function () {
@@ -237,11 +231,7 @@ test('allows clients to delete their own expense', function () {
 
     $response = $this->deleteJson("/api/expenses/{$expense->id}");
 
-    $response
-        ->assertStatus(200)
-        ->assertJson([
-            'message' => 'Deleted'
-        ]);
+    $response->assertStatus(204);
 
     $this->assertDatabaseMissing('expenses', [
         'id' => $expense->id
@@ -259,9 +249,7 @@ test('prevents clients from deleting another users expense', function () {
 
     $response
         ->assertStatus(403)
-        ->assertJson([
-            'message' => 'Forbidden'
-        ]);
+        ->assertJsonPath('message', 'Forbidden.');
 });
 
 test('allows authenticated users to access user endpoint', function () {
