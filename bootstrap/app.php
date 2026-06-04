@@ -1,10 +1,10 @@
 <?php
 
-use http\Client\Response;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
@@ -25,11 +25,25 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->render(function (ValidationException $e, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' =>
+                    [
+                        'detail' => $e->errors()
+                    ],
+                'response_code' => 422,
+            ], 422);
+        });
+
         $exceptions->render(function (AuthenticationException $e, $request) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthenticated user. Please login.',
-                'data' => null,
+                'message' => 'Unauthenticated.',
+                'error' => [
+                    'detail' => 'Please login to complete the request.',
+                ],
                 'response_code' => 401,
             ], 401);
         });
@@ -38,10 +52,13 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You do not have the right permission for this action.',
-                    'data' => null,
+                    'message' => 'Unauthorized.',
+                    'error' => [
+                        'detail' => 'You do not have the right permission for this action.',
+                    ],
                     'response_code' => 403
-                ], 401);
+                ], 403);
             }
         });
+
     })->create();

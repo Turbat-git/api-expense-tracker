@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
 Route::middleware('throttle:20,1')->group(function () {
     // Categories
     Route::middleware('auth:sanctum')
@@ -75,3 +76,5 @@ Route::middleware('throttle:20,1')->group(function () {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+
+

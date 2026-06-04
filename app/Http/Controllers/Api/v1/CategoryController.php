@@ -154,8 +154,10 @@ class CategoryController extends Controller
             if ($category->user_id !== auth()->id()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Forbidden. This Category does not belong to you.',
-                    'data' => null,
+                    'message' => 'Forbidden.',
+                    'error' => [
+                        'detail' => 'This Category does not belong to you',
+                    ],
                     'response_code' => 403
                 ], 403);
             }
@@ -193,8 +195,10 @@ class CategoryController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'message' => 'Forbidden. This Category does not belong to you',
-                    'data' => null,
+                    'message' => 'Forbidden.',
+                    'error' => [
+                        'detail' => 'This Category does not belong to you',
+                    ],
                     'response_code' => 403
                 ], 403);
         }
@@ -235,8 +239,10 @@ class CategoryController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'message' => 'Forbidden. This Category does not belong to you',
-                    'data' => null,
+                    'message' => 'Forbidden.',
+                    'error' => [
+                        'detail' => 'This Category does not belong to you',
+                    ],
                     'response_code' => 403
                 ], 403);
         }

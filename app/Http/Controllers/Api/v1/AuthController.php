@@ -55,7 +55,9 @@ class AuthController extends Controller
                 [
                     'success' => false,
                     'message' => 'Invalid Credentials',
-                    'data'=>null,
+                    'error' => [
+                        'detail' => 'Please enter a valid email and password.',
+                    ],
                     'response_code'=>401
                 ], 401);
         }
@@ -142,9 +144,9 @@ class AuthController extends Controller
     {
 
         $validated = $request->validate([
-            'given_name' => 'required|string|max:255',
-            'family_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'given_name' => 'required|string|max:64',
+            'family_name' => 'required|string|max:64',
+            'email' => 'required|string|email|max:64|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
