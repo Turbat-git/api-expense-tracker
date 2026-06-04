@@ -63,7 +63,7 @@ class AuthController extends Controller
         }
 
         // return token
-        $token = $user->createToken($request->given_name ?? 'unknown-name')->plainTextToken;
+        $token = $user->createToken($request->device_name ?? 'unknown-name')->plainTextToken;
 
         return response()->json([
             'success' => true,
@@ -158,7 +158,7 @@ class AuthController extends Controller
         ]);
 
         // return token
-        $token = $user->createToken($request->given_name ?? 'unknown-name')->plainTextToken;
+        $token = $user->createToken($request->device_name ?? 'unknown-name')->plainTextToken;
 
         $user->assignRole('client');
 
