@@ -40,6 +40,8 @@ class AuthController extends Controller
      *   },
      *   "response_code": 401
      * }
+     *
+     * Reference for API Practice; https://restfulapi.net/rest-api-best-practices/
      */
     public function login(Request $request)
     {

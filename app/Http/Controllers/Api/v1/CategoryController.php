@@ -48,6 +48,8 @@ class CategoryController extends Controller
      *   "message": "Unauthorized role",
      *   "response_code": 403
      * }
+     *
+     * Reference for API Practice; https://restfulapi.net/rest-api-best-practices/
      */
     public function index(Request $request)
     {

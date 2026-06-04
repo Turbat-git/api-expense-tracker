@@ -55,6 +55,8 @@ class ExpenseController extends Controller
      *   },
      *   "response_code": 200
      * }
+     *
+     * Reference for API Practice; https://restfulapi.net/rest-api-best-practices/
      */
     public function index(Request $request)
     {
