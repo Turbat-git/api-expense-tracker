@@ -15,21 +15,39 @@ class CategoryController extends Controller
      *
      * Admins receive all categories paginated. Clients only receive their own.
      *
-     *
      * @response scenario="Admin: all categories" {
-     *   "current_page": 1,
-     *   "data": [{"id": 1, "name": "Electronics", "user_id": 5}],
-     *   "per_page": 10,
-     *   "total": 50
+     *   "success": true,
+     *   "message": "Fetching All Category Data",
+     *   "data": {
+     *     "categories": {
+     *       "current_page": 1,
+     *       "data": [{"id": 1, "name": "Electronics", "user_id": 5}],
+     *       "per_page": 10,
+     *       "total": 50
+     *     }
+     *   },
+     *   "response_code": 200
      * }
      *
      * @response scenario="Client: own categories" {
-     *   "current_page": 1,
-     *   "data": [{"id": 1, "name": "Electronics", "user_id": 3}],
-     *   "per_page": 10,
-     *   "total": 5
+     *   "success": true,
+     *   "message": "Fetching Your Category Data",
+     *   "data": {
+     *     "categories": {
+     *       "current_page": 1,
+     *       "data": [{"id": 1, "name": "Electronics", "user_id": 3}],
+     *       "per_page": 10,
+     *       "total": 5
+     *     }
+     *   },
+     *   "response_code": 200
      * }
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
+     *
+     * @response 403 scenario="Unauthorized role" {
+     *   "success": false,
+     *   "message": "Unauthorized role",
+     *   "response_code": 403
+     * }
      */
     public function index(Request $request)
     {
@@ -63,11 +81,33 @@ class CategoryController extends Controller
      * Admins can assign a category to any user. Clients create categories for themselves only.
      *
      * @bodyParam name string required The name of the category. Example: Electronics
-     * @bodyParam user_id int The ID of the user to assign the category to (admin only). Example: 5
+     * @bodyParam user_id int optional The ID of the user to assign the category to (admin only). Example: 5
      *
-     * @response 201 scenario="Success" {"id": 1, "name": "Electronics", "user_id": 5}
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
-     * @response 422 scenario="Validation error" {"message": "The name field is required."}
+     * @response scenario="Admin success" {
+     *   "success": true,
+     *   "message": "Category created successfully.",
+     *   "data": {
+     *     "category": {
+     *       "id": 1,
+     *       "name": "Electronics",
+     *       "user_id": 5
+     *     }
+     *   },
+     *   "response_code": 201
+     * }
+     *
+     * @response scenario="Client success" {
+     *   "success": true,
+     *   "message": "Category created successfully.",
+     *   "data": {
+     *     "category": "Electronics"
+     *   },
+     *   "response_code": 201
+     * }
+     *
+     * @response 422 scenario="Validation error" {
+     *   "message": "The given data was invalid."
+     * }
      */
     public function store(Request $request)
     {
@@ -127,13 +167,27 @@ class CategoryController extends Controller
      *
      * @urlParam category int required The ID of the category. Example: 1
      *
-     * @response scenario="Success" {"id": 1, "name": "Electronics", "user_id": 5}
-     * @responseField id int The category ID.
-     * @responseField name string The category name.
-     * @responseField user_id int The ID of the owning user.
+     * @response scenario="Success" {
+     *   "success": true,
+     *   "message": "Show category successful.",
+     *   "data": {
+     *     "category": {
+     *       "id": 1,
+     *       "name": "Electronics",
+     *       "user_id": 5
+     *     }
+     *   },
+     *   "response_code": 200
+     * }
      *
-     * @response 403 scenario="Client accessing another user's category" {"message": "Forbidden"}
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
+     * @response 403 scenario="Forbidden (client accessing another user's category)" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Category does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
      */
     public function show(Category $category)
     {
@@ -180,12 +234,29 @@ class CategoryController extends Controller
      * Admins can update any category. Clients can only update their own.
      *
      * @urlParam category int required The ID of the category. Example: 1
-     *
      * @bodyParam name string required The new name of the category. Example: Apparel
      *
-     * @response scenario="Success" {"id": 1, "name": "Apparel", "user_id": 5}
-     * @response 403 scenario="Client updating another user's category" {"message": "Forbidden"}
-     * @response 422 scenario="Validation error" {"message": "The name field is required."}
+     * @response scenario="Success" {
+     *   "success": true,
+     *   "message": "Update category successful.",
+     *   "data": {
+     *     "category": {
+     *       "id": 1,
+     *       "name": "Apparel",
+     *       "user_id": 5
+     *     }
+     *   },
+     *   "response_code": 200
+     * }
+     *
+     * @response 403 scenario="Forbidden" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Category does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
      */
     public function update(Request $request, Category $category)
     {
@@ -225,11 +296,20 @@ class CategoryController extends Controller
      *
      * Admins can delete any category. Clients can only delete their own.
      *
-     *
      * @urlParam category int required The ID of the category. Example: 1
      *
-     * @response scenario="Success" {"message": "Deleted"}
-     * @response 403 scenario="Client deleting another user's category" {"message": "Forbidden"}
+     * @response scenario="Success" {
+     *   "message": "Deleted"
+     * }
+     *
+     * @response 403 scenario="Forbidden" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Category does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
      */
     public function destroy(Category $category)
     {

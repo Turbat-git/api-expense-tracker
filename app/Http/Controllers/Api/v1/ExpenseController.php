@@ -12,63 +12,76 @@ use Knuckles\Scribe\Attributes\Group;
 class ExpenseController extends Controller
 {
     /**
-     *
      * List expenses
      *
      * Admins receive all expenses paginated. Clients only receive their own.
      *
      * @response scenario="Admin: all expenses" {
-     *   "current_page": 1,
-     *   "data": [{
-     *     "id": 1,
-     *     "amount": 15.50,
-     *     "description": "Lunch",
-     *     "category_id": 1,
-     *     "user_id": 5
-     *   }],
-     *   "per_page": 10,
-     *   "total": 50
+     *   "success": true,
+     *   "message": "Fetch expense list successful.",
+     *   "data": {
+     *     "expenses": {
+     *       "current_page": 1,
+     *       "data": [{
+     *         "id": 1,
+     *         "amount": 15.50,
+     *         "description": "Lunch",
+     *         "category_id": 1,
+     *         "user_id": 5
+     *       }],
+     *       "per_page": 10,
+     *       "total": 50
+     *     }
+     *   },
+     *   "response_code": 200
      * }
      *
      * @response scenario="Client: own expenses" {
-     *   "current_page": 1,
-     *   "data": [{
-     *     "id": 1,
-     *     "amount": 15.50,
-     *     "description": "Lunch",
-     *     "category_id": 1,
-     *     "user_id": 3
-     *   }],
-     *   "per_page": 10,
-     *   "total": 5
+     *   "success": true,
+     *   "message": "Fetch expense list successful.",
+     *   "data": {
+     *     "expenses": {
+     *       "current_page": 1,
+     *       "data": [{
+     *         "id": 1,
+     *         "amount": 15.50,
+     *         "description": "Lunch",
+     *         "category_id": 1,
+     *         "user_id": 3
+     *       }],
+     *       "per_page": 10,
+     *       "total": 5
+     *     }
+     *   },
+     *   "response_code": 200
      * }
-     *
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
      */
     public function index(Request $request)
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
-
         if ($user->hasRole('client')) {
-            return Expense::with('category')
-                ->where('user_id', $user->id)
-                ->paginate(10);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Fetch expense list successful.',
+                    'data' => Expense::with('category')
+                        ->where('user_id', $user->id)
+                        ->paginate(10),
+                    'response_code' => 200
+                ], 200);
         }
 
         if ($user->hasRole('admin')) {
-            return Expense::with('category')
-                ->paginate(10);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Fetch expense list successful.',
+                    'data' => Expense::with('category')
+                        ->paginate(10),
+                    'response_code' => 200
+                ], 200);
         }
-
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
     }
 
     /**
@@ -78,30 +91,33 @@ class ExpenseController extends Controller
      * Clients create expenses for themselves only.
      *
      * @bodyParam amount number required The amount of the expense. Example: 15.50
-     * @bodyParam description string required Description of the expense. Example: Lunch
-     * @bodyParam category_id int The ID of the category. Example: 1
-     * @bodyParam user_id int The ID of the user to assign the expense to (admin only). Example: 5
+     * @bodyParam description string nullable Description of the expense. Example: Lunch
+     * @bodyParam category_id int nullable The ID of the category. Example: 1
+     * @bodyParam user_id int optional The ID of the user to assign the expense to (admin only). Example: 5
      *
-     * @response 201 scenario="Success" {
-     *   "id": 1,
-     *   "amount": 15.50,
-     *   "description": "Lunch",
-     *   "category_id": 1,
-     *   "user_id": 5
+     * @response scenario="Client success" {
+     *   "success": true,
+     *   "message": "Expense created successfully.",
+     *   "data": {
+     *     "amount": 15.5,
+     *     "description": "Lunch",
+     *     "category_id": 1
+     *   },
+     *   "response_code": 201
      * }
      *
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
-     * @response 422 scenario="Validation error" {"message": "The given data was invalid."}
+     * @response 422 scenario="Invalid category" {
+     *   "success": false,
+     *   "message": "Invalid category",
+     *   "error": {
+     *     "detail": "That category does not exist."
+     *   },
+     *   "response_code": 422
+     * }
      */
     public function store(Request $request)
     {
         $user = $request->user();
-
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
 
         if ($user->hasRole('client')) {
 
@@ -119,7 +135,13 @@ class ExpenseController extends Controller
 
                 if (!$category) {
                     return response()->json([
-                        'message' => 'Invalid category'
+                        'success' => false,
+                        'message' => 'Invalid category',
+                        'error' =>
+                            [
+                                'detail'=> 'That category does not exist.',
+                            ],
+                        'response_code' => 422,
                     ], 422);
                 }
             }
@@ -131,58 +153,78 @@ class ExpenseController extends Controller
                 'user_id' => $user->id,
             ]);
 
-            return response()->json($expense, 201);
-        }
+            $expense_return = [
+                'amount' => $expense['amount'],
+                'description' => $expense['description'],
+                'category_id' => $expense['category_id'],
+                ];
 
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Fetch expense list successful.',
+                    'data' => $expense_return,
+                    'response_code' => 201
+                ], 201);
+        }
     }
 
 
     /**
      * Get an expense
      *
-     * Admins can view any expense.
-     * Clients can only view their own.
+     * Clients can only view their own expenses.
      *
      * @urlParam expense int required The ID of the expense. Example: 1
      *
      * @response scenario="Success" {
-     *   "id": 1,
-     *   "amount": 15.50,
-     *   "description": "Lunch",
-     *   "category_id": 1,
-     *   "user_id": 5
+     *   "success": true,
+     *   "message": "Show expense successful.",
+     *   "data": {
+     *     "id": 1,
+     *     "amount": 15.50,
+     *     "description": "Lunch",
+     *     "category_id": 1,
+     *     "user_id": 5
+     *   },
+     *   "response_code": 200
      * }
      *
-     * @response 403 scenario="Client accessing another user's expense" {"message": "Forbidden"}
-     * @response 403 scenario="Unauthorized role" {"message": "Unauthorized role"}
+     * @response 403 scenario="Forbidden" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Expense does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
      */
     public function show(Expense $expense)
     {
         $user = auth()->user();
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
-
         if ($user->hasRole('client')) {
 
             if ($expense->user_id !== $user->id) {
-                return response()->json([
-                    'message' => 'Forbidden'
-                ], 403);
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Forbidden.',
+                        'error' => [
+                            'detail' => 'This Expense does not belong to you',
+                        ],
+                        'response_code' => 403
+                    ], 403);
             }
 
-            return response()->json($expense);
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Show expense successful.',
+                    'data' => $expense,
+                    'response_code' => 200
+                ], 200);
         }
-
-        return response()->json([
-            'message' => 'Unauthorized role'
-        ], 403);
     }
 
     /**
@@ -193,35 +235,55 @@ class ExpenseController extends Controller
      *
      * @urlParam expense int required The ID of the expense. Example: 1
      *
-     * @bodyParam amount number The updated expense amount. Example: 25.75
-     * @bodyParam description string The updated description. Example: Dinner
-     * @bodyParam category_id int The updated category ID. Example: 2
+     * @bodyParam amount number nullable Updated amount. Example: 25.75
+     * @bodyParam description string nullable Updated description. Example: Dinner
+     * @bodyParam category_id int nullable Updated category ID. Example: 2
      *
      * @response scenario="Success" {
-     *   "id": 1,
-     *   "amount": 25.75,
-     *   "description": "Dinner",
-     *   "category_id": 2,
-     *   "user_id": 5
+     *   "success": true,
+     *   "message": "Update expense successful.",
+     *   "data": {
+     *     "id": 1,
+     *     "amount": 25.75,
+     *     "description": "Dinner",
+     *     "category_id": 2,
+     *     "user_id": 5
+     *   },
+     *   "response_code": 200
      * }
      *
-     * @response 403 scenario="Client updating another user's expense" {"message": "Forbidden"}
-     * @response 422 scenario="Validation error" {"message": "The given data was invalid."}
+     * @response 403 scenario="Forbidden" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Expense does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
+     *
+     * @response 422 scenario="Invalid category" {
+     *   "success": false,
+     *   "message": "Invalid category",
+     *   "error": {
+     *     "detail": "That category does not exist."
+     *   },
+     *   "response_code": 422
+     * }
      */
     public function update(Request $request, Expense $expense)
     {
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
-
         if ($user->hasRole('client') && $expense->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'Forbidden'
-            ], 403);
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Forbidden.',
+                    'error' => [
+                        'detail' => 'This Expense does not belong to you',
+                    ],
+                    'response_code' => 403
+                ], 403);
         }
 
         $validated = $request->validate([
@@ -238,14 +300,26 @@ class ExpenseController extends Controller
 
             if (!$category) {
                 return response()->json([
-                    'message' => 'Invalid category'
+                    'success' => false,
+                    'message' => 'Invalid category',
+                    'error' =>
+                        [
+                            'detail'=> 'That category does not exist.',
+                        ],
+                    'response_code' => 422,
                 ], 422);
             }
         }
 
         $expense->update($validated);
 
-        return response()->json($expense);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Update expense successful.',
+                'data' => $expense,
+                'response_code' => 200
+            ], 200);
     }
 
 
@@ -257,29 +331,37 @@ class ExpenseController extends Controller
      *
      * @urlParam expense int required The ID of the expense. Example: 1
      *
-     * @response scenario="Success" {"message": "Deleted"}
-     * @response 403 scenario="Client deleting another user's expense" {"message": "Forbidden"}
+     * @response scenario="Success" {
+     *   "message": "Deleted"
+     * }
+     *
+     * @response 403 scenario="Forbidden" {
+     *   "success": false,
+     *   "message": "Forbidden.",
+     *   "error": {
+     *     "detail": "This Expense does not belong to you"
+     *   },
+     *   "response_code": 403
+     * }
      */
     public function destroy(Expense $expense)
     {
         $user = auth()->user();
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
-
         if ($user->hasRole('client') && $expense->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'Forbidden'
-            ], 403);
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Forbidden.',
+                    'error' => [
+                        'detail' => 'This Expense does not belong to you',
+                    ],
+                    'response_code' => 403
+                ], 403);
         }
 
         $expense->delete();
 
-        return response()->json([
-            'message' => 'Deleted'
-        ]);
+        return response()->json([], 204);
     }
 }

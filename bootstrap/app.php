@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed.',
-                'errors' => $e->errors(),
+                'error' => $e->errors(),
                 'response_code' => 422,
             ], 422);
         });
