@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware('throttle:20,1')->group(function () {
+Route::middleware('throttle:api-role-based')->group(function () {
     // Categories
     Route::middleware('auth:sanctum')
         ->get('/categories', [CategoryController::class, 'index'])
