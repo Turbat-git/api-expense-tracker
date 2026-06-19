@@ -108,13 +108,13 @@ class ExpenseController extends Controller
      *   "response_code": 201
      * }
      *
-     * @response 422 scenario="Invalid category" {
+     * @response 404 scenario="Invalid category" {
      *   "success": false,
      *   "message": "Invalid category",
      *   "errors": {
      *     "detail": "That category does not exist."
      *   },
-     *   "response_code": 422
+     *   "response_code": 404
      * }
      */
     public function store(Request $request)
@@ -143,8 +143,8 @@ class ExpenseController extends Controller
                             [
                                 'detail'=> 'That category does not exist.',
                             ],
-                        'response_code' => 422,
-                    ], 422);
+                        'response_code' => 404,
+                    ], 404);
                 }
             }
 
@@ -263,13 +263,13 @@ class ExpenseController extends Controller
      *   "response_code": 403
      * }
      *
-     * @response 422 scenario="Invalid category" {
+     * @response 404 scenario="Invalid category" {
      *   "success": false,
      *   "message": "Invalid category",
      *   "errors": {
      *     "detail": "That category does not exist."
      *   },
-     *   "response_code": 422
+     *   "response_code": 404
      * }
      */
     public function update(Request $request, Expense $expense)
@@ -308,8 +308,8 @@ class ExpenseController extends Controller
                         [
                             'detail'=> 'That category does not exist.',
                         ],
-                    'response_code' => 422,
-                ], 422);
+                    'response_code' => 404,
+                ], 404);
             }
         }
 
